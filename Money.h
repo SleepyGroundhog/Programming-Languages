@@ -16,17 +16,17 @@ class Money : public Array<short int>
 {
 private:
 	static const short m_base = 10;
-	// TODO Добавить знак
+	bool m_is_negative = false;
 	// TODO Добавить поддержку дробных чисел
 public:
 	// Методы для выполнения целочисленных беззнаковых операций. Определены как приватные т.к. класс расширен до знакового
 	// дробного числа
-	static Money uIntAddition(const Money& a, const Money& b);
-	static Money uIntSubtraction(const Money& a, const Money& b);
-	static Money uIntMultiplicationByDigit(const Money& a, const short digit);
-	static Money uIntMultiplication(const Money& a, const Money& b);
+	static Money uIntAdd(const Money& a, const Money& b);
+	static Money uIntSub(const Money& a, const Money& b);
+	static Money uIntMulByDigit(const Money& a, const short digit);
+	static Money uIntMul(const Money& a, const Money& b);
 	static short div(Money& a, const Money& b);
-	static Money uIntDivision(const Money& a, const Money& b);
+	static Money uIntDiv(const Money& a, const Money& b);
 
 public:
 	// Конструкторы, дестркукторы, перегрузка оператора присваивания.

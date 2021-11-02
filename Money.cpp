@@ -25,7 +25,7 @@ string Money::toString() const {
 
 void Money::fromString(string str) {
 	if (regex_match(str.data(), regex(R"(\d{1,100})"))) { 
-		resize(str.size());
+		resize((unsigned int)str.size());
 		for (int idx = 0; idx < getSize(); ++idx)
 			at(idx) = str[str.size() - 1 - idx] - '0';  // Перенос "перевёрнутой" строки в массив
 	}
@@ -125,7 +125,7 @@ void Money::removeLeadingZeros() {
 		pop();
 }
 
-Money Money::uIntAddition(const Money& a, const Money& b) {
+Money Money::uIntAdd(const Money& a, const Money& b) {
 	Money c;
 	int max = std::max(a.m_size, b.m_size);
 	for (int idx = 0; idx < max; ++idx) {
@@ -140,9 +140,9 @@ Money Money::uIntAddition(const Money& a, const Money& b) {
 
 }
 
-Money Money::uIntSubtraction(const Money& a, const Money& b) {
+Money Money::uIntSub(const Money& a, const Money& b) {
 	Money c;
-	assert(a >= b && "Беззнаковое вычитание! a должно быть больше или равно b");
+	assert(a >= b && "unsigned subtraction - a have to be greater or equal b");
 	for (int idx = 0; idx < a.getSize() + 1; ++idx) {
 		c.at(idx) += a.at(idx) - b.at(idx);
 		if (c.m_data[idx] < 0) {
@@ -155,9 +155,9 @@ Money Money::uIntSubtraction(const Money& a, const Money& b) {
 	return c;
 }
 
-Money Money::uIntMultiplicationByDigit(const Money& a, const short digit) {
+Money Money::uIntMulByDigit(const Money& a, const short digit) {
 	Money c;
-	assert(digit >= 0 && digit < 10 && "digit должна быть цифрой!");
+	assert(digit >= 0 && digit < 10 && "digit is not digit");
 	for (int idx = 0; idx < a.getSize(); ++idx) {
 		c.at(idx) += (a.at(idx) * digit);
 		c.at(idx + 1) += c.at(idx) / Money::m_base;
@@ -168,39 +168,27 @@ Money Money::uIntMultiplicationByDigit(const Money& a, const short digit) {
 	return c;
 }
 
-Money Money::uIntMultiplication(const Money& a, const Money& b) {
+Money Money::uIntMul(const Money& a, const Money& b) {
 	Money c;
-	if (b != Money()) {
-		for (int idx = b.getSize() - 1; idx >= 0; --idx) {
-			c.rightShift(1);
-			c = c + Money::uIntMultiplicationByDigit(a, b.at(idx));
-		}
+	for (int idx = b.getSize() - 1; idx >= 0; --idx) {
+		c.rightShift(1);
+		c = uIntAdd(c, Money::uIntMulByDigit(a, b.at(idx))); // при переполнении сдесь сработает исключение для сложения
 	}
 	return c;
 }
 
-
-// Метод целочисленного деления вычитанием. В связи с тем, что такое деление критично (видно невооруженным взгядом) медленное при b в ~100 раз меньшем, чем а
-// то данная функция может использоваться только как вспомогательная для реализации более эффективных методов деления.
-// Требование к входным данным: a < 10*b. При невыполнении данного условия функция будет работат слишком медленно, поэтому передача иных входных данных 
-// будет вызывать ошибку.
-short Money::div(Money& a, const Money& b) {
-	short result = 0;
-	assert(a < Money(b).rightShift(1) && "Требование к входным данным функции div: a < 10*b");
-	while (a >= b) {
-		a = a - b;
-		++result;
-	}
-	return result;
-}
-
-Money Money::uIntDivision(const Money& a, const Money& b) {
+Money Money::uIntDiv(const Money& a, const Money& b) {
 	Money result, sub;
 	for (int i = 0; a.getSize() - i >= 0; ++i) {
 		sub.rightShift(1);
 		sub.at(0) = a.at(a.getSize() - i);
 		result.rightShift(1);
-		result.at(0) = Money::div(sub, b);
+		int count_div = 0;
+		while (sub >= b) {
+			sub = uIntSub(sub, b);
+			++count_div;
+		}
+		result.at(0) = count_div;
 	}
 	return result;
 }
@@ -208,10 +196,11 @@ Money Money::uIntDivision(const Money& a, const Money& b) {
 
 Money operator+(const Money& a, const Money& b) {
 	// TODO Доопределить до знаковых операций
-	return Money::uIntAddition(a, b);
+	return Money::uIntAdd(a, b);
 }
+
 Money operator-(const Money& a, const Money& b) {
 	// TODO Доопределить до знаковых операций
-	return Money::uIntSubtraction(a, b);
+	return Money::uIntSub(a, b);
 
 }
