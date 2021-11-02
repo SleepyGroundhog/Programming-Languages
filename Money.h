@@ -1,14 +1,11 @@
 #pragma once
 
 #include "Array.h"
-
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <regex>
 #include <cassert>
-#include <algorithm>
-
 
 using namespace std;
 
@@ -25,7 +22,6 @@ public:
 	static Money uIntSub(const Money& a, const Money& b);
 	static Money uIntMulByDigit(const Money& a, const short digit);
 	static Money uIntMul(const Money& a, const Money& b);
-	static short div(Money& a, const Money& b);
 	static Money uIntDiv(const Money& a, const Money& b);
 
 public:
@@ -40,6 +36,8 @@ public:
 	string toString() const;
 	void fromString(string str);
 	void removeLeadingZeros();
+
+	bool isNegative() const;
 
 	friend ostream& operator<<(ostream& out, const Money& a);
 	friend istream& operator>>(istream& in, Money& a);
@@ -64,18 +62,12 @@ public:
 	friend Money operator+(const Money& a, const Money& b);
 	friend Money operator-(const Money& a, const Money& b);
 
-	
+	Money operator+();
+	Money operator-();
 
-	
-
-	//
-	//
 	//friend Money operator*(const Money& a, const Money& b);
 	//friend Money operator*(const Money& a, const short digit);
-	//friend Money operator/(Money a, const Money& b);
-
-
-	
+	//friend Money operator/(Money a, const Money& b);	
 
 };
 

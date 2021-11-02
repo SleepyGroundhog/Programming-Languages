@@ -1,6 +1,6 @@
 #include "Money.h"
 
-Money::Money() : Array() {
+Money::Money() : Array(), m_is_negative(false) {
 	m_size = 1;
 }
 
@@ -17,6 +17,7 @@ Money::~Money() {}
 
 string Money::toString() const {
 	stringstream buf;
+	if (isNegative()) buf << "-";
 	for (int idx = getSize() - 1; idx >= 0; --idx)
 		buf << m_data[idx];
 	return buf.str();
@@ -24,19 +25,25 @@ string Money::toString() const {
 }
 
 void Money::fromString(string str) {
-	if (regex_match(str.data(), regex(R"(\d{1,100})"))) { 
+	if (regex_match(str.data(), regex(R"([+,-]?\d{1,100})"))) { 
+		if (str[0] == '-' || str[0] == '+') {
+			m_is_negative = (str[0] == '-');
+			str.erase(0, 1);
+		}
+			
 		resize((unsigned int)str.size());
 		for (int idx = 0; idx < getSize(); ++idx)
 			at(idx) = str[str.size() - 1 - idx] - '0';  // Перенос "перевёрнутой" строки в массив
 	}
 	else
 		throw (invalid_argument("\nMoney.h : void fromString(string str) :\n\t\t\t string can't be converted to Money\n"));
-	// TODO Добавить поддержку знаковых и дробных чисел
+	// TODO Добавить поддержку дробных чисел
 }
 
 Money& Money::operator=(const Money& a) {
 	if (this != &a) {
 		copy(a);  // Копирование полей класса Array
+		m_is_negative = a.isNegative();
 	}
 	return *this;
 }
@@ -127,7 +134,7 @@ void Money::removeLeadingZeros() {
 
 Money Money::uIntAdd(const Money& a, const Money& b) {
 	Money c;
-	int max = std::max(a.m_size, b.m_size);
+	int max = (a.m_size >= b.m_size ? a.m_size : b.m_size);
 	for (int idx = 0; idx < max; ++idx) {
 		c.at(idx) += a.at(idx) + b.at(idx);
 		c.at(idx + 1) += c.at(idx) / Money::m_base;
@@ -193,7 +200,6 @@ Money Money::uIntDiv(const Money& a, const Money& b) {
 	return result;
 }
 
-
 Money operator+(const Money& a, const Money& b) {
 	// TODO Доопределить до знаковых операций
 	return Money::uIntAdd(a, b);
@@ -203,4 +209,20 @@ Money operator-(const Money& a, const Money& b) {
 	// TODO Доопределить до знаковых операций
 	return Money::uIntSub(a, b);
 
+}
+
+
+
+bool Money::isNegative() const {
+	return m_is_negative;
+}
+
+Money Money::operator+() {
+	return *this;
+}
+
+Money Money::operator-() {
+	Money temp(*this);
+	temp.m_is_negative = !temp.isNegative();
+	return temp;
 }

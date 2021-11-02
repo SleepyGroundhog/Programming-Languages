@@ -19,8 +19,9 @@ int main()
 {
 	testUnsignedIntMathOperation();
 	Money a("3110000000132647639486127461297864981236700");
-	Money b("342658969458236523864981236700");
-	
+	Money b("-342658969458236523864981236700");
+	cout << a << " " << a.isNegative() << "\n";
+	cout << b << " " << b.isNegative() << "\n";
 	
 	
 	//cout << Money::compare(a, b) << "\n";
