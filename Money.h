@@ -14,6 +14,7 @@ class Money : public Array<short int>
 private:
 	static const short m_base = 10;
 	bool m_is_negative = false;
+	int m_point_pos = 2;
 	// TODO Добавить поддержку дробных чисел
 public:
 	// Методы для выполнения целочисленных беззнаковых операций. Определены как приватные т.к. класс расширен до знакового
@@ -66,7 +67,7 @@ public:
 	Money operator-() const;
 
 	friend Money operator*(const Money& a, const Money& b);
-	friend Money operator/(const Money& a, const Money& b);	
+	friend Money operator/(Money a, const Money& b);	
 
 };
 

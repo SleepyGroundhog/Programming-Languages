@@ -1,6 +1,6 @@
 #include "Money.h"
 
-Money::Money() : Array(), m_is_negative(false) {
+Money::Money() : Array(), m_is_negative(false), m_point_pos(2) {
 	m_size = 1;
 }
 
@@ -17,20 +17,24 @@ Money::~Money() {}
 
 string Money::toString() const {
 	stringstream buf;
-	if (isNegative()) buf << "-";
 	for (int idx = getSize() - 1; idx >= 0; --idx)
 		buf << m_data[idx];
-	return buf.str();
-	// TODO Добавить учет знака и точки
+	string result = buf.str();
+	while (result.size() < 3)
+		result.insert(0, "0");
+	result.insert(result.size() - m_point_pos, ",");
+	if (isNegative()) result.insert(0, "-");
+	return result;
 }
 
 void Money::fromString(string str) {
-	if (regex_match(str.data(), regex(R"([+,-]?\d{1,100})"))) { 
+	if (str == "0") { *this = Money(); return; }
+	if (regex_match(str.data(), regex(R"([+,-]?\d{1,100},\d{2})"))) { 
 		if (str[0] == '-' || str[0] == '+') {
 			m_is_negative = (str[0] == '-');
 			str.erase(0, 1);
 		}
-			
+		str.erase(str.size() - 3, 1);
 		resize((unsigned int)str.size());
 		for (int idx = 0; idx < getSize(); ++idx)
 			at(idx) = str[str.size() - 1 - idx] - '0';  // Перенос "перевёрнутой" строки в массив
@@ -44,6 +48,7 @@ Money& Money::operator=(const Money& a) {
 	if (this != &a) {
 		copy(a);  // Копирование полей класса Array
 		m_is_negative = a.isNegative();
+		m_point_pos = a.m_point_pos;
 	}
 	return *this;
 }
@@ -193,7 +198,7 @@ Money Money::uIntMul(const Money& left, const Money& right) {
 }
 
 Money Money::uIntDiv(const Money& left, const Money& right) {
-	if (right == Money("0"))
+	if (right == Money())
 		throw exception("\nMoney.cpp : Money uIntDiv(const Money& left, const Money& right) :\n\t\t\t division by zero\n");
 	Money result, sub;
 	for (int i = 0; left.getSize() - i >= 0; ++i) {
@@ -245,18 +250,26 @@ Money Money::operator-() const {
 Money operator*(const Money& left, const Money& right) {
 	Money result = (left.isNegative() == right.isNegative() ? Money::uIntMul(left, right) : -Money::uIntMul(left, right));
 	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
+	if (result.at(1) >= 5)
+		result = result + Money("0,01").rightShift(2);
+	result.leftShift(1);
+	result.m_point_pos = 2;
 	return result;
 }
 
 
-Money operator/(const Money& left, const Money& right) {
+Money operator/(Money left, const Money& right) {
 	Money result;	
-	if (right == Money("0"))
-		throw exception("\nMoney.cpp : Money operator/(const Money& left, const Money& right) :\n\t\t\t division by zero\n");
-	if (Money::compareByAbs(left, right) == -1) {
+	if (right == Money())
+		throw exception("division by zero\n");
+	if (Money::compareByAbs(left.rightShift(3), right) == -1) {
 		return result;
 	}
 	result = (left.isNegative() == right.isNegative() ? Money::uIntDiv(left, right) : -Money::uIntDiv(left, right));
 	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
+	if (result.at(0) >= 5)
+		result = result + Money("0,010");
+	result.leftShift(1);
+	result.m_point_pos = 2;
 	return result;
 }
