@@ -60,10 +60,11 @@ istream& operator>>(istream& in, Money& a) {
 	return in;
 }
 
+
 int Money::compareByAbs(const Money& a, const Money& b) {
-		if (a.m_size != b.m_size) // сравнение чисел по их длине
-			return (a.m_size > b.m_size) ? 1 : -1;
-		for (int idx = a.m_size - 1; idx >= 0; --idx) { // сравнение если числа одинаковой длинны
+		if (a.getSize() != b.getSize()) // сравнение чисел по их длине
+			return (a.getSize() > b.getSize()) ? 1 : -1;
+		for (int idx = a.getSize() - 1; idx >= 0; --idx) { // сравнение если числа одинаковой длинны
 			if (a[idx] > b[idx])
 				return 1;
 			else if (a[idx] < b[idx])
@@ -73,8 +74,14 @@ int Money::compareByAbs(const Money& a, const Money& b) {
 }
 
 int Money::compare(const Money& a, const Money& b) {
-	return compareByAbs(a, b);
-	// TODO После добавления знака в число - изменить метод для работы со знаковыми числами
+	if (a.isNegative() != b.isNegative())
+		return b.isNegative() ? 1 : -1;
+	if (!a.isNegative()) {
+		return Money::compareByAbs(a, b);
+	}
+	else {
+		return -Money::compareByAbs(a, b);
+	}
 }
 
 bool operator==(const Money& a, const Money& b) {
