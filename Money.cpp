@@ -18,7 +18,7 @@ Money::~Money() {}
 string Money::toString() const {
 	stringstream buf;
 	for (int idx = getSize() - 1; idx >= 0; --idx)
-		buf << m_data[idx];
+		buf << m_data[idx] + '0';
 	string result = buf.str();
 	while (result.size() < 3)
 		result.insert(0, "0");
@@ -144,53 +144,53 @@ void Money::removeLeadingZeros() {
 }
 
 Money Money::uIntAdd(const Money& left, const Money& right) {
-	Money c;
+	Money result;
 	int max = (left.m_size >= right.m_size ? left.m_size : right.m_size);
 	for (int idx = 0; idx < max; ++idx) {
-		c.at(idx) += left.at(idx) + right.at(idx);
-		c.at(idx + 1) += c.at(idx) / Money::m_base;
-		c.at(idx) %= Money::m_base;
+		result.at(idx) += left.at(idx) + right.at(idx);
+		result.at(idx + 1) += result.at(idx) / Money::m_base;
+		result.at(idx) %= Money::m_base;
 	}
-	if (c.at(Money::MAX_SIZE) != 0)
+	if (result.at(Money::MAX_SIZE) != 0)
 		throw overflow_error("\nMoney.h : Money operator+(const Money& a, const Money& b) :\n\t\t\t money overflow\n");
-	c.m_size = (c.at(max) == 0 ? max : max + 1);  // Устанавливает размер результата учитывая изменение его размера	
-	return c;
+	result.m_size = (result.at(max) == 0 ? max : max + 1);  // Устанавливает размер результата учитывая изменение его размера	
+	return result;
 
 }
 
 Money Money::uIntSub(const Money& left, const Money& right) {
-	Money c;
+	Money result;
 	for (int idx = 0; idx < left.getSize() + 1; ++idx) {
-		c.at(idx) += left.at(idx) - right.at(idx);
-		if (c.m_data[idx] < 0) {
-			c.at(idx) += Money::m_base;
-			c.at(idx + 1) -= 1;
+		result.at(idx) += left.at(idx) - right.at(idx);
+		if (result.m_data[idx] < 0) {
+			result.at(idx) += Money::m_base;
+			result.at(idx + 1) -= 1;
 		}
 	}
-	c.m_size = left.getSize();	
-	c.removeLeadingZeros();
-	return c;
+	result.m_size = left.getSize();	
+	result.removeLeadingZeros();
+	return result;
 }
 
-Money Money::uIntMulByDigit(const Money& left, const short right_digit) {
-	Money c;
+Money Money::uIntMulByDigit(const Money& left, const char right_digit) {
+	Money result;
 	for (int idx = 0; idx < left.getSize(); ++idx) {
-		c.at(idx) += (left.at(idx) * right_digit);
-		c.at(idx + 1) += c.at(idx) / Money::m_base;
-		c.at(idx) %= Money::m_base;
+		result.at(idx) += (left.at(idx) * right_digit);
+		result.at(idx + 1) += result.at(idx) / Money::m_base;
+		result.at(idx) %= Money::m_base;
 	}
-	c.m_size = (c.at(left.getSize()) == 0 ? left.getSize() : left.getSize() + 1); // Устанавливает размер результата учитывая изменение его размера
-	c.removeLeadingZeros();
-	return c;
+	result.m_size = (result.at(left.getSize()) == 0 ? left.getSize() : left.getSize() + 1); // Устанавливает размер результата учитывая изменение его размера
+	result.removeLeadingZeros();
+	return result;
 }
 
 Money Money::uIntMul(const Money& left, const Money& right) {
-	Money c;
+	Money result;
 	for (int idx = right.getSize() - 1; idx >= 0; --idx) {
-		c.rightShift(1);
-		c = uIntAdd(c, Money::uIntMulByDigit(left, right.at(idx))); // при переполнении сдесь сработает исключение для сложения
+		result.rightShift(1);
+		result = uIntAdd(result, Money::uIntMulByDigit(left, right.at(idx))); // при переполнении сдесь сработает исключение для сложения
 	}
-	return c;
+	return result;
 }
 
 Money Money::uIntDiv(const Money& left, const Money& right) {

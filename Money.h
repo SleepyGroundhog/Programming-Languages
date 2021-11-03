@@ -8,10 +8,10 @@
 
 using namespace std;
 
-class Money : public Array<short int>
+class Money : public Array<char>
 {
 private:
-	static const short m_base = 10;
+	static const char m_base = 10;
 	bool m_is_negative = false;
 	int m_point_pos = 2;
 	// TODO Добавить поддержку дробных чисел
@@ -20,7 +20,7 @@ public:
 	// дробного числа
 	static Money uIntAdd(const Money& left, const Money& right);
 	static Money uIntSub(const Money& left, const Money& right);
-	static Money uIntMulByDigit(const Money& left, const short right_digit);
+	static Money uIntMulByDigit(const Money& left, const char right_digit);
 	static Money uIntMul(const Money& left, const Money& right);
 	static Money uIntDiv(const Money& left, const Money& right);
 
