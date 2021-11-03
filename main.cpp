@@ -18,10 +18,10 @@ void testUnsignedIntMathOperation() {
 
 void testSignedIntCompareOperation() {
 	int count_right = 0;
-	const int test_amount = 120;
+	const int test_amount = 20 * 6;
 	vector<string> a = {  "1", "-1", "1", "-1",  "2", "-2", "2", "-2", "-1",  "1", "1", "-1", "10", "-10", "10", "-10",  "1",   "1", "-1",  "-1" };
 	vector<string> b = { "-1",  "1", "1", "-1", "-1",  "1", "1", "-1",  "2", "-2", "2", "-2",  "1",   "1", "-1",  "-1", "10", "-10", "10", "-10" };
-	for (int i = 0; i < test_amount / 6; ++i) {
+	for (int i = 0; i < 20; ++i) {
 		count_right += (((Money(a[i]) == Money(b[i])) == (stoi(a[i]) == stoi(b[i]))) ? 1 : 0);
 		count_right += (((Money(a[i]) != Money(b[i])) == (stoi(a[i]) != stoi(b[i]))) ? 1 : 0);
 		count_right += (((Money(a[i]) >= Money(b[i])) == (stoi(a[i]) >= stoi(b[i]))) ? 1 : 0);
@@ -32,19 +32,23 @@ void testSignedIntCompareOperation() {
 	cout << "signed int comparisons operators: " << std::boolalpha << (count_right == test_amount) << endl;
 }
 
+void testSignedIntAddAndSubMathOperation() {
+	int count_right = 0;
+	const int test_amount = 20 * 2;
+	vector<string> a = { "1", "-1", "1", "-1",  "2", "-2", "2", "-2", "-1",  "1", "1", "-1", "10", "-10", "10", "-10",  "1",   "1", "-1",  "-1" };
+	vector<string> b = { "-1",  "1", "1", "-1", "-1",  "1", "1", "-1",  "2", "-2", "2", "-2",  "1",   "1", "-1",  "-1", "10", "-10", "10", "-10" };
+	for (int i = 0; i < 20; ++i) {
+		count_right += ((stoi((Money(a[i]) + Money(b[i])).toString()) == (stoi(a[i]) + stoi(b[i]))) ? 1 : 0);
+		count_right += ((stoi((Money(a[i]) - Money(b[i])).toString()) == (stoi(a[i]) - stoi(b[i]))) ? 1 : 0);
+	}
+	cout << "signed int addition and subtitute operators: " << std::boolalpha << (count_right == test_amount) << endl;
+}
+
 int main()
 {
 	testUnsignedIntMathOperation();
 	testSignedIntCompareOperation();
-	//Money a("3110000000132647639486127461297864981236700");
-	//Money b("-342658969458236523864981236700");
-	//cout << a << " " << a.isNegative() << "\n";
-	//cout << b << " " << b.isNegative() << "\n";
-	
-	
-	//cout << Money::compare(a, b) << "\n";
-	//cout << Money::compare(b, a) << "\n";
-	//cout << Money::compare(a, a) << "\n";
+	testSignedIntAddAndSubMathOperation();
 
 
 }

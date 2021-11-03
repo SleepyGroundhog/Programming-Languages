@@ -60,52 +60,51 @@ istream& operator>>(istream& in, Money& a) {
 	return in;
 }
 
-
-int Money::compareByAbs(const Money& a, const Money& b) {
-		if (a.getSize() != b.getSize()) // сравнение чисел по их длине
-			return (a.getSize() > b.getSize()) ? 1 : -1;
-		for (int idx = a.getSize() - 1; idx >= 0; --idx) { // сравнение если числа одинаковой длинны
-			if (a[idx] > b[idx])
+int Money::compareByAbs(const Money& left, const Money& right) {
+		if (left.getSize() != right.getSize()) // сравнение чисел по их длине
+			return (left.getSize() > right.getSize()) ? 1 : -1;
+		for (int idx = left.getSize() - 1; idx >= 0; --idx) { // сравнение если числа одинаковой длинны
+			if (left[idx] > right[idx])
 				return 1;
-			else if (a[idx] < b[idx])
+			else if (left[idx] < right[idx])
 				return -1;
 		}
 		return 0;
 }
 
-int Money::compare(const Money& a, const Money& b) {
-	if (a.isNegative() != b.isNegative())
-		return b.isNegative() ? 1 : -1;
-	if (!a.isNegative()) {
-		return Money::compareByAbs(a, b);
+int Money::compare(const Money& left, const Money& right) {
+	if (left.isNegative() != right.isNegative())
+		return right.isNegative() ? 1 : -1;
+	if (!left.isNegative()) {
+		return Money::compareByAbs(left, right);
 	}
 	else {
-		return -Money::compareByAbs(a, b);
+		return -Money::compareByAbs(left, right);
 	}
 }
 
-bool operator==(const Money& a, const Money& b) {
-	return Money::compare(a, b) == 0;
+bool operator==(const Money& left, const Money& right) {
+	return Money::compare(left, right) == 0;
 }
 
-bool operator!=(const Money& a, const Money& b) {
-	return Money::compare(a, b) != 0;
+bool operator!=(const Money& left, const Money& right) {
+	return Money::compare(left, right) != 0;
 }
 
-bool operator>=(const Money& a, const Money& b) {
-	return Money::compare(a, b) != -1;
+bool operator>=(const Money& left, const Money& right) {
+	return Money::compare(left, right) != -1;
 }
 
-bool operator<=(const Money& a, const Money& b) {
-	return Money::compare(a, b) !=  1;
+bool operator<=(const Money& left, const Money& right) {
+	return Money::compare(left, right) !=  1;
 }
 
-bool operator >(const Money& a, const Money& b) {
-	return Money::compare(a, b) ==  1;
+bool operator >(const Money& left, const Money& right) {
+	return Money::compare(left, right) ==  1;
 }
 
-bool operator <(const Money& a, const Money& b) {
-	return Money::compare(a, b) == -1;
+bool operator <(const Money& left, const Money& right) {
+	return Money::compare(left, right) == -1;
 }
 
 // Сдвиг массива вправо (человеко-читаемое число сдвигается влево). Эквивалентно операции умножения на 10^x
@@ -137,13 +136,15 @@ Money& Money::leftShift(int x) {
 void Money::removeLeadingZeros() {
 	while (at(getSize() - 1) == 0 && getSize() > 1)
 		pop();
+	if (getSize() == 1 && at(0) == 0)
+		m_is_negative = false;
 }
 
-Money Money::uIntAdd(const Money& a, const Money& b) {
+Money Money::uIntAdd(const Money& left, const Money& right) {
 	Money c;
-	int max = (a.m_size >= b.m_size ? a.m_size : b.m_size);
+	int max = (left.m_size >= right.m_size ? left.m_size : right.m_size);
 	for (int idx = 0; idx < max; ++idx) {
-		c.at(idx) += a.at(idx) + b.at(idx);
+		c.at(idx) += left.at(idx) + right.at(idx);
 		c.at(idx + 1) += c.at(idx) / Money::m_base;
 		c.at(idx) %= Money::m_base;
 	}
@@ -154,52 +155,52 @@ Money Money::uIntAdd(const Money& a, const Money& b) {
 
 }
 
-Money Money::uIntSub(const Money& a, const Money& b) {
+Money Money::uIntSub(const Money& left, const Money& right) {
 	Money c;
-	assert(a >= b && "unsigned subtraction - a have to be greater or equal b");
-	for (int idx = 0; idx < a.getSize() + 1; ++idx) {
-		c.at(idx) += a.at(idx) - b.at(idx);
+	assert(Money::compareByAbs(left, right) != -1 && " - a have to be >= b - unsigned subtraction");
+	for (int idx = 0; idx < left.getSize() + 1; ++idx) {
+		c.at(idx) += left.at(idx) - right.at(idx);
 		if (c.m_data[idx] < 0) {
 			c.at(idx) += Money::m_base;
 			c.at(idx + 1) -= 1;
 		}
 	}
-	c.m_size = a.getSize();	
+	c.m_size = left.getSize();	
 	c.removeLeadingZeros();
 	return c;
 }
 
-Money Money::uIntMulByDigit(const Money& a, const short digit) {
+Money Money::uIntMulByDigit(const Money& left, const short right_digit) {
 	Money c;
-	assert(digit >= 0 && digit < 10 && "digit is not digit");
-	for (int idx = 0; idx < a.getSize(); ++idx) {
-		c.at(idx) += (a.at(idx) * digit);
+	assert(right_digit >= 0 && right_digit < 10 && "digit is not digit");
+	for (int idx = 0; idx < left.getSize(); ++idx) {
+		c.at(idx) += (left.at(idx) * right_digit);
 		c.at(idx + 1) += c.at(idx) / Money::m_base;
 		c.at(idx) %= Money::m_base;
 	}
-	c.m_size = (c.at(a.getSize()) == 0 ? a.getSize() : a.getSize() + 1); // Устанавливает размер результата учитывая изменение его размера
+	c.m_size = (c.at(left.getSize()) == 0 ? left.getSize() : left.getSize() + 1); // Устанавливает размер результата учитывая изменение его размера
 	c.removeLeadingZeros();
 	return c;
 }
 
-Money Money::uIntMul(const Money& a, const Money& b) {
+Money Money::uIntMul(const Money& left, const Money& right) {
 	Money c;
-	for (int idx = b.getSize() - 1; idx >= 0; --idx) {
+	for (int idx = right.getSize() - 1; idx >= 0; --idx) {
 		c.rightShift(1);
-		c = uIntAdd(c, Money::uIntMulByDigit(a, b.at(idx))); // при переполнении сдесь сработает исключение для сложения
+		c = uIntAdd(c, Money::uIntMulByDigit(left, right.at(idx))); // при переполнении сдесь сработает исключение для сложения
 	}
 	return c;
 }
 
-Money Money::uIntDiv(const Money& a, const Money& b) {
+Money Money::uIntDiv(const Money& left, const Money& right) {
 	Money result, sub;
-	for (int i = 0; a.getSize() - i >= 0; ++i) {
+	for (int i = 0; left.getSize() - i >= 0; ++i) {
 		sub.rightShift(1);
-		sub.at(0) = a.at(a.getSize() - i);
+		sub.at(0) = left.at(left.getSize() - i);
 		result.rightShift(1);
 		int count_div = 0;
-		while (sub >= b) {
-			sub = uIntSub(sub, b);
+		while (sub >= right) {
+			sub = uIntSub(sub, right);
 			++count_div;
 		}
 		result.at(0) = count_div;
@@ -207,28 +208,32 @@ Money Money::uIntDiv(const Money& a, const Money& b) {
 	return result;
 }
 
-Money operator+(const Money& a, const Money& b) {
-	// TODO Доопределить до знаковых операций
-	return Money::uIntAdd(a, b);
+Money operator+(const Money& left, const Money& right) {
+	if (left.isNegative()) {
+		if (right.isNegative()) return -(-left + (-right));
+		else return right - (-left);
+	}
+	else if (right.isNegative())
+		return right - (-left);
+	return Money::uIntAdd(right, left);
 }
 
-Money operator-(const Money& a, const Money& b) {
-	// TODO Доопределить до знаковых операций
-	return Money::uIntSub(a, b);
-
+Money operator-(const Money& left, const Money& right) {
+	if (right.isNegative()) return left + (-right);
+	else if (left.isNegative()) return -(-left + right);
+	else if (left < right) return -(right - left);
+	return Money::uIntSub(left, right);
 }
-
-
 
 bool Money::isNegative() const {
 	return m_is_negative;
 }
 
-Money Money::operator+() {
+Money Money::operator+() const {
 	return *this;
 }
 
-Money Money::operator-() {
+Money Money::operator-() const {
 	Money temp(*this);
 	temp.m_is_negative = !temp.isNegative();
 	return temp;

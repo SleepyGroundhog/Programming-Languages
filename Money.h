@@ -18,11 +18,11 @@ private:
 public:
 	// Методы для выполнения целочисленных беззнаковых операций. Определены как приватные т.к. класс расширен до знакового
 	// дробного числа
-	static Money uIntAdd(const Money& a, const Money& b);
-	static Money uIntSub(const Money& a, const Money& b);
-	static Money uIntMulByDigit(const Money& a, const short digit);
-	static Money uIntMul(const Money& a, const Money& b);
-	static Money uIntDiv(const Money& a, const Money& b);
+	static Money uIntAdd(const Money& left, const Money& right);
+	static Money uIntSub(const Money& left, const Money& right);
+	static Money uIntMulByDigit(const Money& left, const short right_digit);
+	static Money uIntMul(const Money& left, const Money& right);
+	static Money uIntDiv(const Money& left, const Money& right);
 
 public:
 	// Конструкторы, дестркукторы, перегрузка оператора присваивания.
@@ -44,26 +44,26 @@ public:
 
 	
 	// Методы и операторы сравнения
-	static int compareByAbs(const Money& a, const Money& b);
-	static int compare(const Money& a, const Money& b);
+	static int compareByAbs(const Money& left, const Money& right);
+	static int compare(const Money& left, const Money& right);
 
-	friend bool operator==(const Money& a, const Money& b);
-	friend bool operator!=(const Money& a, const Money& b);
-	friend bool operator>=(const Money& a, const Money& b);
-	friend bool operator<=(const Money& a, const Money& b);
-	friend bool operator >(const Money& a, const Money& b);
-	friend bool operator <(const Money& a, const Money& b);
+	friend bool operator==(const Money& left, const Money& right);
+	friend bool operator!=(const Money& left, const Money& right);
+	friend bool operator>=(const Money& left, const Money& right);
+	friend bool operator<=(const Money& left, const Money& right);
+	friend bool operator >(const Money& left, const Money& right);
+	friend bool operator <(const Money& left, const Money& right);
 	
 	// Основные арифметические операторы
 
 	Money& rightShift(int x);
 	Money& leftShift(int x);
 
-	friend Money operator+(const Money& a, const Money& b);
-	friend Money operator-(const Money& a, const Money& b);
+	friend Money operator+(const Money& left, const Money& right);
+	friend Money operator-(const Money& left, const Money& right);
 
-	Money operator+();
-	Money operator-();
+	Money operator+() const;
+	Money operator-() const;
 
 	//friend Money operator*(const Money& a, const Money& b);
 	//friend Money operator*(const Money& a, const short digit);
