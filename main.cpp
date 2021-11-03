@@ -44,11 +44,24 @@ void testSignedIntAddAndSubMathOperation() {
 	cout << "signed int addition and subtitute operators: " << std::boolalpha << (count_right == test_amount) << endl;
 }
 
+void testSignedIntDivAndMulMathOperation() {
+	int count_right = 0;
+	const int test_amount = 20 * 2;
+	vector<string> a = { "123", "-123", "1324", "-123",  "243", "-223", "32", "-234", "-123",  "125", "165", "-16", "1076", "-106", "107", "-1067",  "1",   "133", "1",  "0" };
+	vector<string> b = { "-143",  "134", "134", "-134", "-431",  "14", "14", "-134",  "243", "-243", "278", "-278",  "1778",   "177", "-16",  "-1", "1", "-1", "10", "-103" };
+	
+	for (int i = 0; i < 20; ++i) {
+		count_right += ((stoi((Money(a[i]) * Money(b[i])).toString()) == (stoi(a[i]) * stoi(b[i]))) ? 1 : 0);
+		count_right += ((stoi((Money(a[i]) / Money(b[i])).toString()) == (stoi(a[i]) / stoi(b[i]))) ? 1 : 0);
+	}
+	cout << "signed multiplication and division operators: " << std::boolalpha << (count_right == test_amount) << endl;
+}
+
 int main()
 {
 	testUnsignedIntMathOperation();
 	testSignedIntCompareOperation();
 	testSignedIntAddAndSubMathOperation();
-
+	testSignedIntDivAndMulMathOperation();
 
 }

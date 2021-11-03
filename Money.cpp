@@ -193,13 +193,15 @@ Money Money::uIntMul(const Money& left, const Money& right) {
 }
 
 Money Money::uIntDiv(const Money& left, const Money& right) {
+	if (right == Money("0"))
+		throw exception("\nMoney.cpp : Money uIntDiv(const Money& left, const Money& right) :\n\t\t\t division by zero\n");
 	Money result, sub;
 	for (int i = 0; left.getSize() - i >= 0; ++i) {
 		sub.rightShift(1);
 		sub.at(0) = left.at(left.getSize() - i);
 		result.rightShift(1);
 		int count_div = 0;
-		while (sub >= right) {
+		while (compareByAbs(sub, right) != -1) {
 			sub = uIntSub(sub, right);
 			++count_div;
 		}
@@ -237,4 +239,24 @@ Money Money::operator-() const {
 	Money temp(*this);
 	temp.m_is_negative = !temp.isNegative();
 	return temp;
+}
+
+
+Money operator*(const Money& left, const Money& right) {
+	Money result = (left.isNegative() == right.isNegative() ? Money::uIntMul(left, right) : -Money::uIntMul(left, right));
+	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
+	return result;
+}
+
+
+Money operator/(const Money& left, const Money& right) {
+	Money result;	
+	if (right == Money("0"))
+		throw exception("\nMoney.cpp : Money operator/(const Money& left, const Money& right) :\n\t\t\t division by zero\n");
+	if (Money::compareByAbs(left, right) == -1) {
+		return result;
+	}
+	result = (left.isNegative() == right.isNegative() ? Money::uIntDiv(left, right) : -Money::uIntDiv(left, right));
+	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
+	return result;
 }

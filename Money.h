@@ -65,9 +65,8 @@ public:
 	Money operator+() const;
 	Money operator-() const;
 
-	//friend Money operator*(const Money& a, const Money& b);
-	//friend Money operator*(const Money& a, const short digit);
-	//friend Money operator/(Money a, const Money& b);	
+	friend Money operator*(const Money& a, const Money& b);
+	friend Money operator/(const Money& a, const Money& b);	
 
 };
 
