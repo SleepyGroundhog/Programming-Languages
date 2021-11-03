@@ -5,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <regex>
-#include <cassert>
 
 using namespace std;
 

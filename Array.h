@@ -102,7 +102,7 @@ public:
 		if (rangeCheck(idx, 0, getSize()))
 			return m_data[idx];
 		else
-			throw out_of_range("\nArray.h : T& operator[](int idx) const :\n\t\t\t out of range\n");
+			throw out_of_range("out of range");
 	}
 
 	// Перегрузка оператора вывода для массива. Выводит все элементы массива через пробел
@@ -110,6 +110,10 @@ public:
 		for (int i = 0; i < a.m_size; ++i)
 			out << a[i] << " ";
 		return out;
+	}
+
+	void printArray() {
+		cout << *this << "\n";
 	}
 
 	// Перегрузка оператора ввода для массива. Ввод всех элементов через пробел

@@ -114,7 +114,6 @@ bool operator <(const Money& left, const Money& right) {
 
 // Сдвиг массива вправо (человеко-читаемое число сдвигается влево). Эквивалентно операции умножения на 10^x
 Money& Money::rightShift(int x) {
-	assert(x > 0 && "x должен быть положительным. Для свига в другую сторону используется оператор leftShift(x)");
 	if (*this == Money())
 		return *this;
 	for (int idx = getSize() - 1; idx >= 0; --idx)
@@ -127,7 +126,6 @@ Money& Money::rightShift(int x) {
 
 // Свиг массива влево (человеко-читаемое число сдвигается вправо)
 Money& Money::leftShift(int x) {
-	assert(x > 0 && "x должен быть положительным. Для свига в другую сторону используется оператор rightShift(x)");
 	if (*this == Money())
 		return *this;
 	for (int idx = 0; idx < getSize(); ++idx)
@@ -162,7 +160,6 @@ Money Money::uIntAdd(const Money& left, const Money& right) {
 
 Money Money::uIntSub(const Money& left, const Money& right) {
 	Money c;
-	assert(Money::compareByAbs(left, right) != -1 && " - a have to be >= b - unsigned subtraction");
 	for (int idx = 0; idx < left.getSize() + 1; ++idx) {
 		c.at(idx) += left.at(idx) - right.at(idx);
 		if (c.m_data[idx] < 0) {
@@ -177,7 +174,6 @@ Money Money::uIntSub(const Money& left, const Money& right) {
 
 Money Money::uIntMulByDigit(const Money& left, const short right_digit) {
 	Money c;
-	assert(right_digit >= 0 && right_digit < 10 && "digit is not digit");
 	for (int idx = 0; idx < left.getSize(); ++idx) {
 		c.at(idx) += (left.at(idx) * right_digit);
 		c.at(idx + 1) += c.at(idx) / Money::m_base;
@@ -260,15 +256,15 @@ Money operator*(const Money& left, const Money& right) {
 
 Money operator/(Money left, const Money& right) {
 	Money result;	
-	if (right == Money())
-		throw exception("division by zero\n");
+	if (right == Money() || right == Money("0,00"))
+		throw exception("division by zero");
 	if (Money::compareByAbs(left.rightShift(3), right) == -1) {
 		return result;
 	}
 	result = (left.isNegative() == right.isNegative() ? Money::uIntDiv(left, right) : -Money::uIntDiv(left, right));
 	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
 	if (result.at(0) >= 5)
-		result = result + Money("0,010");
+		result = result + Money("0,01").rightShift(1);
 	result.leftShift(1);
 	result.m_point_pos = 2;
 	return result;
