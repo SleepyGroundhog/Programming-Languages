@@ -108,7 +108,7 @@ public:
 	// Перегрузка оператора вывода для массива. Выводит все элементы массива через пробел
 	friend ostream& operator<<(ostream& out, const Array& a) {
 		for (int i = 0; i < a.m_size; ++i)
-			out << a[i] << " ";
+			out << (int)a[i] << " ";
 		return out;
 	}
 

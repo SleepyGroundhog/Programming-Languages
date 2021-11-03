@@ -20,8 +20,8 @@ int main()
 		cout << "b print like array: "; b.printArray();
 		cout << "Enter index to print element from a and b: ";
 		cin >> i;
-		try { cout << a[i] << "\n"; } catch (exception exc) { cerr << exc.what() << "\n"; }
-		try { cout << b[i] << "\n"; } catch (exception exc) { cerr << exc.what() << "\n"; }
+		try { cout << (int)a[i] << "\n"; } catch (exception exc) { cerr << exc.what() << "\n"; }
+		try { cout << (int)b[i] << "\n"; } catch (exception exc) { cerr << exc.what() << "\n"; }
 		cout << "\n";
 	}
 	
