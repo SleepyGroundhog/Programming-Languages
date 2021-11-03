@@ -119,20 +119,4 @@ public:
 		}
 		return in;
 	}
-
-	// Добавляет элемент в конец массива
-	void push(T element) {
-		m_data[m_size] = element;
-		++m_size;
-	}
-
-	// Удаляет элемент с конца массива
-	void pop() {
-		if (!isEmpty()) {
-			m_data[--m_size] = 0;
-		}
-		else
-			throw exception("\nArray.h : void pop() :\n\t\t\t tryint to delete element from empty array\n");
-	}
-
 };

@@ -140,12 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Money.cpp" />
+    <ClCompile Include="Hex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
-    <ClInclude Include="byte.h" />
-    <ClInclude Include="Money.h" />
+    <ClInclude Include="Hex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

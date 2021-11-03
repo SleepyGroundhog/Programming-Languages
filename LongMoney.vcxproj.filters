@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Money.cpp">
+    <ClCompile Include="Hex.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +26,7 @@
     <ClInclude Include="Array.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Money.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="byte.h">
+    <ClInclude Include="Hex.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
