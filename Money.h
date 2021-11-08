@@ -66,7 +66,7 @@ public:
 	Money operator-() const;
 
 	friend Money operator*(const Money& a, const Money& b);
-	friend Money operator/(Money a, const Money& b);	
+	friend Money operator/(Money a, Money b);	
 
 };
 

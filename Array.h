@@ -91,10 +91,10 @@ public:
 	}
 
 	// Перегрузка оператора присваивания 
-	Array* operator=(const Array& a) {
+	Array& operator=(const Array& a) {
 		if (this != &a)
 			copy(a);
-		return this;
+		return *this;
 	}
 
 	// Перегрузка оператора индексации с проверкой того, что индекс находится в диапазоне [0, m_size)
