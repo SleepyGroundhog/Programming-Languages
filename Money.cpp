@@ -18,7 +18,7 @@ Money::~Money() {}
 string Money::toString() const {
 	stringstream buf;
 	for (int idx = getSize() - 1; idx >= 0; --idx)
-		buf << m_data[idx] + '0';
+		buf << (int)m_data[idx];
 	string result = buf.str();
 	while (result.size() < 3)
 		result.insert(0, "0");
@@ -248,17 +248,17 @@ Money operator*(const Money& left, const Money& right) {
 	if (result.getSize() == 1 && result.at(0) == 0) result.m_is_negative = false;
 	if (result.at(1) >= 5)
 		result = result + Money("0,01").rightShift(2);
-	result.leftShift(1);
+	result.leftShift(2);
 	result.m_point_pos = 2;
 	return result;
 }
 
 
-Money operator/(Money left, const Money& right) {
+Money operator/(Money left, Money right) {
 	Money result;	
 	if (right == Money() || right == Money("0,00"))
 		throw exception("division by zero");
-	if (Money::compareByAbs(left.rightShift(3), right) == -1) {
+	if (Money::compareByAbs(left.rightShift(5), right.rightShift(2)) == -1) {
 		return result;
 	}
 	result = (left.isNegative() == right.isNegative() ? Money::uIntDiv(left, right) : -Money::uIntDiv(left, right));
