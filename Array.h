@@ -14,7 +14,7 @@ public:
 	Array(const Array& a);
 	~Array();
 
-
+	virtual void print() const;
 	int size() const;
 	static bool range(int value, int begin, int end);
 
@@ -25,13 +25,12 @@ public:
 	friend ostream& operator<<(ostream& out, const Array& right);
 	friend istream& operator>>(istream& in, const Array& right);
 
-	virtual Array* operator+(const Array& right);
-
+	virtual Array* operator+(const Array& right) const;
+	virtual string tname() const { return "Array"; }
 protected:
 	int m_size;
 	char* m_data;
-	const static int MAX_SIZE = 10;
+	const static int MAX_SIZE = 50;
 	void init();
-
 
 };

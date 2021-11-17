@@ -76,10 +76,15 @@ istream& operator>>(istream& in, const Array& right) {
 	return in;
 }
 
-Array* Array::operator+(const Array& right) {
+
+Array* Array::operator+(const Array& right) const {
 	Array* result;
 	result = new Array(max(size(), right.size()));
 	for (int i = 0; i < result->size(); ++i)
 		result->m_data[i] = m_data[i] + right.m_data[i];
 	return result;
+}
+
+void Array::print() const {
+	cout << *this;
 }

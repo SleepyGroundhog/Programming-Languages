@@ -1,65 +1,73 @@
 #include "BitString.h"
 
 BitString::BitString(int size) : Array(size) {}
+BitString::BitString(string str) { fromString(str); }
 
-BitString operator~(BitString right) {
-	for (int i = 0; i < right.size(); ++i)
-		right.m_data[i] = !right.m_data[i];
-	return right;
+void BitString::fromString(string str) {
+	for (int i = 0; i < (int)str.size(); ++i) {
+		m_data[i] = str[i] - '0';
+	}
+	m_size = str.size();
 }
 
-BitString operator&(BitString left, const BitString& right) {
+BitString BitString::operator~() {
+	for (int i = 0; i < this->size(); ++i)
+		this->m_data[i] = !this->m_data[i];
+	return *this;
+}
+
+BitString BitString::operator&(const BitString& right) {
+	BitString left = *this;
 	error(left.size() != right.size(), 3, "diffirent sizes");
 	for (int i = 0; i < max(left.size(), right.size()); ++i)
 		left.m_data[i] = left.m_data[i] && right.m_data[i];
 	return left;
 }
 
-BitString operator|(BitString left, const BitString& right) {
+BitString BitString::operator+(const BitString& right) {
+	BitString left = *this;
 	error(left.size() != right.size(), 3, "diffirent sizes");
 	for (int i = 0; i < max(left.size(), right.size()); ++i)
 		left.m_data[i] = left.m_data[i] || right.m_data[i];
 	return left;
 }
 
-BitString operator^(BitString left, const BitString& right) {
+BitString BitString::operator^(const BitString& right) {
+	BitString left = *this;
 	error(left.size() != right.size(), 3, "diffirent sizes");
 	for (int i = 0; i < max(left.size(), right.size()); ++i)
 		left.m_data[i] = left.m_data[i] != right.m_data[i];
 	return left;
 }
 
-BitString& BitString::operator>>(int x) {
-	for (int i = size() - 1; i >= x; --i)
-		m_data[i] = m_data[i - x];
-	for (int i = x - 1; i >= 0; --i)
+BitString& BitString::operator>>(int right) {
+	for (int i = size() - 1; i >= right; --i)
+		m_data[i] = m_data[i - right];
+	for (int i = right - 1; i >= 0; --i)
 		m_data[i] = 0;
 	return *this;
 }
 
-BitString& BitString::operator<<(int x) {
-	for (int i = 0; i < size() - x; ++i)
-		m_data[i] = m_data[i + x];
-	for (int i = size() - x; i < size(); ++i)
+BitString& BitString::operator<<(int left) {
+	for (int i = 0; i < size() - left; ++i)
+		m_data[i] = m_data[i + left];
+	for (int i = size() - left; i < size(); ++i)
 		m_data[i] = 0;
 
 	return *this;
 }
 
-ostream& operator<<(ostream& output, const BitString& right) {
+ostream& operator<<(ostream& out, const BitString& right) {
 	for (int i = 0; i < right.size(); ++i)
-		output << (int)right[i];
-	return output;
+		out << (int)right[i];
+	return out;
 }
 
-istream& operator>>(istream& input, BitString& right) {
-	string temp;
-	input >> temp;
-	for (int i = 0; i < (int)temp.size(); ++i) {
-		right.m_data[i] = temp[i] - '0';
-	}
-	right.m_size = temp.size();
-	return input;
+istream& operator>>(istream& in, BitString& right) {
+	string str;
+	in >> str;
+	right.fromString(str);
+	return in;
 }
 
 BitString& BitString::operator=(const BitString& right) {
@@ -75,4 +83,8 @@ BitString& BitString::operator=(const BitString& right) {
 		m_size = right.m_size;
 	}
 	return *this;
+}
+
+void BitString::print() const {
+	cout << *this;
 }
