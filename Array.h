@@ -4,9 +4,10 @@
 #include <algorithm>
 #include <string>
 #include <sstream>
-using namespace std;
 
-void error(bool condition, int code, string msg);
+void error(bool condition, int code, std::string msg);
+
+
 
 class Array {
 public:
@@ -14,19 +15,17 @@ public:
 	Array(const Array& a);
 	~Array();
 
-	virtual void print() const;
+	virtual Array& operator=(const Array& right);
+
+	virtual std::string toString() const;
 	int size() const;
 	static bool range(int value, int begin, int end);
 
-	Array& operator=(const Array& right);
+	friend std::istream& operator>>(std::istream& in, const Array& right);
 	char& operator[](int idx) const;
+	
+	virtual Array operator+(const Array& right) const;
 
-
-	friend ostream& operator<<(ostream& out, const Array& right);
-	friend istream& operator>>(istream& in, const Array& right);
-
-	virtual Array* operator+(const Array& right) const;
-	virtual string tname() const { return "Array"; }
 protected:
 	int m_size;
 	char* m_data;
@@ -34,3 +33,5 @@ protected:
 	void init();
 
 };
+
+std::ostream& operator<<(std::ostream& out, const Array& right);

@@ -1,12 +1,12 @@
 #include "Money.h"
+using namespace std;
 
 Money::Money() : Array(), m_point_pos(2) { m_size = 1; }
-Money::Money(const Money& money) { *this = money; }
+Money::Money(const Money& money) : Array() { *this = money; }
 Money::Money(const string str) : Array() { fromString(str); }
 Money::~Money() {}
 void Money::removeLeadingZeros() { while (m_data[size() - 1] == 0 && size() > 1) m_data[--m_size] = 0; }
 bool operator==(const Money& left, const Money& right) { return Money::compare(left, right) == 0; }
-ostream& operator<<(ostream& out, const Money& a) { out << a.toString(); return out; }
 istream& operator>>(istream& in, Money& a) { string buf; in >> buf; a.fromString(buf); return in; }
 
 int Money::compare(const Money& left, const Money& right) {
@@ -68,7 +68,7 @@ Money& Money::leftShift(int right) {
 	return *this;
 }
 
-Money* Money::operator+(const Money& right) const {
+Money Money::operator+(const Money& right) const {
 	Money result, left(*this);
 	int max = (left.m_size >= right.m_size ? left.m_size : right.m_size);
 	for (int idx = 0; idx < max; ++idx) {
@@ -78,8 +78,7 @@ Money* Money::operator+(const Money& right) const {
 	}
 	error(result.m_data[Money::MAX_SIZE] != 0, 3, "money unsigned int addition overflow");
 	result.m_size = (result.m_data[max] == 0 ? max : max + 1);
-	Money* result_ptr = new Money(result);
-	return result_ptr;
+	return result;
 }
 
 Money Money::operator-(const Money& right) const {
@@ -104,10 +103,10 @@ Money Money::operator*(const Money& right) const {
 	Money result, left(*this);
 	for (int idx = right.size() - 1; idx >= 0; --idx) {
 		result.rightShift(1);
-		result = *(result + left * right.m_data[idx]);
+		result = result + left * right.m_data[idx];
 	}
 	if (result.m_data[1] >= 5)
-		result = *(result + Money("0,01").rightShift(2));
+		result = result + Money("0,01").rightShift(2);
 	result.leftShift(2);
 	result.m_point_pos = 2;
 	return result;
@@ -145,12 +144,8 @@ Money Money::operator/(Money right)  const {
 		result.m_data[0] = count_div;
 	}
 	if (result.m_data[0] >= 5)
-		result = *(result + Money("0,01").rightShift(1));
+		result = result + Money("0,01").rightShift(1);
 	result.leftShift(1);
 	result.m_point_pos = 2;
 	return result;
-}
-
-void Money::print() const {
-	cout << *this << "\n";
 }

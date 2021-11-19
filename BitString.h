@@ -2,24 +2,24 @@
 
 #include "Array.h"
 
-class BitString : Array {
+class BitString : public Array {
 public:
 	BitString(int size = 0);
-	BitString(string str);
+	BitString(std::string str);
+	BitString(const BitString& bstr);
+	~BitString();
 
-	void fromString(string str);
-	virtual void print() const;
+	virtual BitString& operator=(const BitString& right);
 
-	friend ostream& operator<<(ostream& out, const BitString& right);
-	friend istream& operator>>(istream& in, BitString& right);
+	virtual std::string toString() const;
+	void fromString(std::string str);
 
 	virtual BitString& operator>>(int right);
 	virtual BitString& operator<<(int right);
-	virtual BitString& operator=(const BitString& right);
-	virtual BitString operator&(const BitString& right);
-	virtual BitString operator+(const BitString& right);
-	virtual BitString operator~();
-	virtual BitString operator^(const BitString& right);
-
-	virtual string tname() const { return "BitString"; }
+	virtual BitString operator^(BitString right) const;
+	virtual BitString operator&(BitString right) const;
+	virtual BitString operator+(BitString right) const;
+	virtual BitString operator~() const;
+	
+	friend std::istream& operator>>(std::istream& in, BitString& right);
 };
