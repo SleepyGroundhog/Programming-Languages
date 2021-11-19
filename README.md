@@ -4,4 +4,4 @@
  - var 6 - Hex class
 
 # Programming-Languages---lab-4
- - var 4 - BitStrings and Money classes with virtual funtions
+ - var 4 - BitString and Money classes with virtual funtions
