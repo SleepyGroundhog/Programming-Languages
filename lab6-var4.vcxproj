@@ -139,23 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Action.cpp" />
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="OctString.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="ShowDec.cpp" />
-    <ClCompile Include="ShowStr.cpp" />
-    <ClCompile Include="ShowBin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="OctString.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="ShowBin.h" />
-    <ClInclude Include="ShowDec.h" />
-    <ClInclude Include="ShowStr.h" />
     <ClInclude Include="SymbString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

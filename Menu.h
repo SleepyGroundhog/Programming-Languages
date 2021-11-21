@@ -4,21 +4,14 @@
 
 #include <vector>
 #include "SymbString.h"
-#include "Action.h"
 #include "Factory.h" 
 
-typedef enum { AddObj, DeleteObj, DisplayObj, SumObj, Exit } Act;
+typedef enum { AddObj, DeleteObj, DisplayObj, DisplayAllObj, SumObj, Exit } Operations;
 
-class Menu {
+class UI {
 public:
-	Menu();
-	Act    selectJob() const;
-	SymbString* selectObject(const Factory&) const;
-	Action* selectAction(const SymbString*) const;
-	// selectOperator(const SymbString*, const SymbString*);
-	static int readCode(int);
-private:
-	std::vector<Action*> pAct;
+	static Operations readOperation();
+	static int        readCode(int);
 };
 
 #endif // MENU_H

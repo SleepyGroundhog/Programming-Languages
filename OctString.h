@@ -9,14 +9,12 @@ bool isOctStringValue(std::string);
 
 class OctString : public SymbString {
 public:
-	OctString(std::string _name) : m_name(_name) {}
+	OctString(std::string id) : SymbString(id) {}
 	OctString(std::string, std::string);
-	const std::string& getName() const { return m_name; }
+	const std::string& getId() const { return m_id; }
 	const std::string& getValue() const { return m_value; }
-	int getSize() const { return m_value.size(); }
-private:
-	std::string m_name;
-	std::string m_value;
+	int                getSize() const { return (int)m_value.size(); }
+	SymbString* operator+(SymbString object2);
 };
 
 #endif // HEXSTRING_H

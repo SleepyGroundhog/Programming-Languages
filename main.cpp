@@ -1,41 +1,40 @@
 // Main.cpp 
 #include <iostream>
-#include "SymbString.h"
-#include "OctString.h"
-#include "Action.h" 
-#include "ShowStr.h" 
-#include "ShowDec.h"
-#include "ShowBin.h"
-#include "Factory.h"
 #include "Menu.h"
 using namespace std;
 
 int main() {
 	setlocale(LC_ALL, "");
 	Factory factory;
-	Menu menu;
-	Act operation;
-	while ((operation = menu.selectJob()) != Exit) {
+	Operations operation;
+	SymbString* object1, * object2;
+	while ((operation = UI::readOperation()) != Exit) {
 		switch (operation) {
-		case AddObj: {
+		case AddObj:
 			factory.addObject();
 			break;
-		}
-		case DeleteObj: {
+		case DeleteObj:
 			factory.deleteObject();
 			break;
-		}
-		case DisplayObj: { // Отображение объекта - один операнд
-			SymbString* object = menu.selectObject(factory);
-			Action* pAct = menu.selectAction(object);
-			if (pAct)
-				pAct->operate(object);
+		case DisplayObj:
+			object1 = factory.selectObject();
+			if (object1)
+				object1->showString();
 			break;
-		} 
-		case SumObj: {
-			cout << "\nОперация не реализована\n\n"; // Сложение объектов - два операнда
+		case DisplayAllObj:
+			factory.print();
 			break;
-		}
+		case SumObj:
+			object1 = factory.selectObject();
+			if (object1) {
+				object2 = factory.selectObject();
+				if (object1 && object2) {
+					SymbString* temp = (*object1 + *object2);
+					temp->showString();
+					delete temp;
+				}
+			}
+			break;
 		}
 	}
 	return 0;

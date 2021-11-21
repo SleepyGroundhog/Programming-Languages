@@ -6,11 +6,12 @@
 #include "SymbString.h"
 
 class Factory {
-	friend class Menu;
+	friend class UI;
 public:
 	Factory() {}
-	void addObject();
-	void deleteObject();
+	void        addObject();
+	void        deleteObject();
+	void        print();
 	SymbString* selectObject() const;
 private:
 	std::vector<SymbString*> object;
