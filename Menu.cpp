@@ -1,69 +1,73 @@
 // Menu.cpp
 #include <iostream>
-#include "AString.h" 
+#include <string>
 #include "SymbString.h"
-#include "HexString.h" 
-#include "Menu.h" 
+#include "OctString.h" 
+#include "Menu.h"
+
+#include "ShowStr.h"
+#include "ShowBin.h"
+#include "ShowDec.h"
+
 using namespace std;
 
-Menu::Menu(vector<Action*> _pAct) : pAct(_pAct) {}
-
-JobMode Menu::SelectJob() const {
-	cout << "======================================\n";
-	cout << "Select one of the following job modes:\n";
-	cout << "1. Add object"                    << endl;
-	cout << "2. Delete object"                 << endl;
-	cout << "3. Work with object"              << endl;
-	cout << "4. Exit"                          << endl;
-	int item = SelectItem(4);
-	return (JobMode)(item - 1);
+Menu::Menu() {
+	Action* pActs[] = { &show_str, &show_dec, &show_bin };
+	vector<Action*> actions(pActs, pActs + sizeof(pActs) / sizeof(Action*));
+	pAct = actions;
 }
 
-AString* Menu::SelectObject(const Factory& fctry) const
-{
-	int nItem = fctry.pObj.size();
-	if (!nItem) {
-		cout << "There are no objects." << endl;
-		cin.get();
+Act Menu::selectJob() const {
+	cout << "Выберите операцию:\n";
+	cout << "1. Создать объект\n";
+	cout << "2. Удалить объект\n";
+	cout << "3. Отобразить объект\n";
+	cout << "4. Сложить два объекта\n";
+	cout << "5. Выйти\n\n";
+	int code = readCode(5);
+	return (Act)(code - 1);
+}
+
+
+SymbString* Menu::selectObject(const Factory& fctry) const {
+	int maxCode = fctry.object.size();
+	if (!maxCode) {
+		cout << "\nНет существующих объектов.\n\n";
 		return 0;
 	}
-	cout << "--------------------------------------\n";
-	cout << "Select one of the following Object:\n";
-	for (int i = 0; i < nItem; ++i) {
+	cout << "Выберите объект:\n";
+	for (int i = 0; i < maxCode; ++i) {
 		cout << i + 1 << ". ";
-		cout << fctry.pObj[i]->GetName() << endl;
+		cout << fctry.object[i]->getName() << endl;
 	}
-	int item = SelectItem(nItem);
-	return fctry.pObj[item - 1];
+	int code = readCode(maxCode);
+	return fctry.object[code - 1];
 }
 
-Action* Menu::SelectAction(const AString* pObj) const {
-	if (!pObj) return 0;
-	int nItem = pAct.size();
-	cout << "--------------------------------------\n";
-	cout << "Select one of the following Actions:\n";
-	for (int i = 0; i < nItem; ++i) {
+Action* Menu::selectAction(const SymbString* object) const {
+	if (!object) return 0;
+	int maxCode = pAct.size();
+	cout << "Выберите операцию отображения:\n";
+	for (int i = 0; i < maxCode; ++i) {
 		cout << i + 1 << ". ";
-		cout << pAct[i]->GetName() << endl;
+		cout << pAct[i]->getName() << endl;
 	}
-	int item = SelectItem(nItem);
-	return pAct[item - 1];
+	int code = readCode(maxCode);
+	return pAct[code - 1];
 }
 
-int Menu::SelectItem(int nItem) {
-	cout << "--------------------------------------\n";
-	int item;
+int Menu::readCode(int maxCode) {
+	int code;
+	string input;
 	while (true) {
-		cin >> item;
-		if ((item > 0) && (item <= nItem) && (cin.peek() == '\n')) {
-			cin.get();
+		cout << ">>> "; getline(cin, input);
+		try { code = stoi(input); } catch (...) { code = -1; }
+		if ((code > 0) && (code <= maxCode)) {
 			break;
-		}
-		else {
-			cout << "Error (must be number from 1 to " << nItem << "): " << endl;
+		} else {
+			cout << "\nОшибка: необходимо ввести код от 1 до " << maxCode << " :\n\n";
 			cin.clear();
-			while (cin.get() != '\n') {};
 		}
 	}
-	return item;
+	return code;
 }

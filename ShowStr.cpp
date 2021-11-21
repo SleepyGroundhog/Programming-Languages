@@ -3,10 +3,14 @@
 #include "ShowStr.h" 
 using namespace std;
 
-void ShowStr::Operate(AString* pObj) {
-	cout << pObj->GetName() << ": ";
-	cout << pObj->GetVal() << endl;
-	cin.get();
+void ShowString::operate(SymbString* object) {
+	cout << object->getName() << ": ";
+	cout << object->getValue() << endl;
 }
 
-ShowStr show_str; // Глобальный объект
+void ShowString::operator()(SymbString* object) {
+	cout << object->getName() << ": ";
+	cout << object->getValue() << endl;
+}
+
+ShowString show_str; // Глобальный объект

@@ -1,29 +1,25 @@
 // Action.cpp
 #include <iostream>
 #include "Action.h" 
-#include "HexString.h"
+#include "OctString.h"
 using namespace std;
 
-#pragma warning(disable : 4996)
-
-int HexToInt(char hexDigit) {
-	if (hexDigit >= '0' && hexDigit <= '9')
-		return hexDigit - '0';
-	if (hexDigit >= 'A' && hexDigit <= 'F')
-		return hexDigit - 'A' + 10;
+int OctToInt(char octDigit) {
+	if (octDigit >= '0' && octDigit < '8')
+		return octDigit - '0';
 }
 
-long Action::GetDecimal(AString* pObj) const {
-	if (dynamic_cast<HexString*>(pObj)) {
+long Action::GetDecimal(SymbString* object) const {
+	if (dynamic_cast<OctString*>(object)) {
 		long dest = 0;
-		string source = pObj->GetVal();
+		string source = object->getValue();
 		for (int i = 0; i < source.size(); ++i) {
-			dest += HexToInt(source[i] * pow(16, source.size() - 1 - i));
+			dest += source[i] - '0' * pow(8, source.size() - 1 - i);
 		}
 		return dest;
 	}
 	else {
-		cout << "Action not supported." << endl;
+		cout << "Операция не поддерживается." << endl;
 		return -1;
 	}
 }

@@ -3,16 +3,17 @@
 #define FACTORY_H
 
 #include <vector>
-#include "AString.h"
+#include "SymbString.h"
 
 class Factory {
 	friend class Menu;
 public:
 	Factory() {}
-	void AddObject();
-	void DeleteObject();
+	void addObject();
+	void deleteObject();
+	SymbString* selectObject() const;
 private:
-	std::vector<AString*> pObj;
+	std::vector<SymbString*> object;
 };
 
 #endif // FACTORY_H 

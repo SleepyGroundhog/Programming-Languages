@@ -3,19 +3,19 @@
 #define SIMBSTRING_H
 
 #include <string>
-#include "AString.h"
 
-class SymbString : public AString {
+class SymbString {
 public:
-	SymbString(std::string _name) : name(_name) {}
+	virtual ~SymbString() {}
+	SymbString(std::string _name = "") : m_name(_name) {}
 	SymbString(std::string _name, std::string _val) :
-		name(_name), val(_val) {}
-	const std::string& GetName() const { return name; }
-	const std::string& GetVal() const { return val; }
-	int GetSize() const { return val.size(); }
+		m_name(_name), m_value(_val) {}
+	virtual const std::string& getName() const { return m_name; }
+	virtual const std::string& getValue() const { return m_value; }
+	virtual int getSize() const { return m_value.size(); }
 private:
-	std::string name;
-	std::string val;
+	std::string m_name;
+	std::string m_value;
 };
 
 #endif // SIMBSTRING_H

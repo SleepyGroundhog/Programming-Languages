@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="Factory.cpp" />
-    <ClCompile Include="HexString.cpp" />
+    <ClCompile Include="OctString.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ShowDec.cpp" />
@@ -150,9 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
-    <ClInclude Include="AString.h" />
     <ClInclude Include="Factory.h" />
-    <ClInclude Include="HexString.h" />
+    <ClInclude Include="OctString.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="ShowBin.h" />
     <ClInclude Include="ShowDec.h" />

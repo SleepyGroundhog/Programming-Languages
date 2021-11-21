@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="HexString.cpp">
+    <ClCompile Include="OctString.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="ShowBin.cpp">
@@ -44,10 +44,7 @@
     <ClInclude Include="SymbString.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="HexString.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="AString.h">
+    <ClInclude Include="OctString.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Action.h">

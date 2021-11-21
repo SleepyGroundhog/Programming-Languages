@@ -3,19 +3,20 @@
 #define MENU_H
 
 #include <vector>
-#include "AString.h" 
+#include "SymbString.h"
 #include "Action.h"
 #include "Factory.h" 
 
-typedef enum { AddObj, DelObj, WorkWithObj, Exit } JobMode;
+typedef enum { AddObj, DeleteObj, DisplayObj, SumObj, Exit } Act;
 
 class Menu {
 public:
-	Menu(std::vector<Action*>);
-	JobMode    SelectJob() const;
-	AString* SelectObject(const Factory&) const;
-	Action* SelectAction(const AString*) const;
-	static int SelectItem(int);
+	Menu();
+	Act    selectJob() const;
+	SymbString* selectObject(const Factory&) const;
+	Action* selectAction(const SymbString*) const;
+	// selectOperator(const SymbString*, const SymbString*);
+	static int readCode(int);
 private:
 	std::vector<Action*> pAct;
 };

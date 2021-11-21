@@ -1,16 +1,15 @@
 // ShowDec.cpp 
 #include <iostream> 
 #include "ShowDec.h" 
-#include "HexString.h" 
+#include "OctString.h" 
 using namespace std;
 
-void ShowDec::Operate(AString* pObj) {
-	cout << pObj->GetName() << ": ";
-	long decVal = GetDecimal(pObj);
+void ShowDec::operate(SymbString* object) {
+	cout << object->getName() << ": ";
+	long decVal = GetDecimal(object);
 	if (decVal != -1)
-		cout << GetDecimal(pObj);
+		cout << GetDecimal(object);
 	cout << endl;
-	cin.get();
 }
 
 ShowDec show_dec; // Глобальный объект 

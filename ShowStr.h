@@ -4,14 +4,15 @@
 
 #include "Action.h" 
 
-class ShowStr : public Action {
+class ShowString : public Action {
 public:
-	ShowStr() : name("Show string value") {}
-	void Operate(AString*);
-	const std::string& GetName() const { return name; }
+	ShowString() : m_name("Показать значение строки") {}
+	void operate(SymbString*);
+	const std::string& getName() const { return m_name; }
+	void operator()(SymbString*);
 private:
-	std::string name;  // Обозначение операции
+	std::string m_name;  // Обозначение операции
 };
-extern ShowStr show_str;  // Определениие в ShowStr.cpp
+extern ShowString show_str;  // Определениие в ShowStr.cpp
 
 #endif // SHOWSTR_H

@@ -2,21 +2,20 @@
 #include <iostream> 
 #include "ShowBin.h" 
 #include "ShowDec.h" 
-#include "AString.h" 
+#include "SymbString.h" 
 using namespace std;
 
-void ShowBin::Operate(AString* pObj) {
-	cout << pObj->GetName() << ": ";
-	cout << GetBinary(pObj) << endl;
-	cin.get();
+void ShowBin::operate(SymbString* object) {
+	cout << object->getName() << ": ";
+	cout << GetBinary(object) << endl;
 }
 
-string ShowBin::GetBinary(AString* pObj) const {
-	int nBinDigit = 4 * pObj->GetSize();
+string ShowBin::GetBinary(SymbString* object) const {
+	int nBinDigit = 4 * object->getSize();
 	char* binStr = new char[nBinDigit + 1];
 	for (int k = 0; k < nBinDigit; ++k) binStr[k] = '0';
 	binStr[nBinDigit] = 0;
-	long decVal = GetDecimal(pObj);
+	long decVal = GetDecimal(object);
 	if (-1 == decVal)
 		return string("");
 	int i = nBinDigit - 1;

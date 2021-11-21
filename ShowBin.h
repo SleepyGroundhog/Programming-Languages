@@ -6,12 +6,12 @@
 
 class ShowBin : public Action {
 public:
-	ShowBin() : name("Show binary value") {}
-	void Operate(AString*);
-	const std::string& GetName() const { return name; }
+	ShowBin() : m_name("Показать двоичное представление строки") {}
+	void operate(SymbString*);
+	const std::string& getName() const { return m_name; }
 private:
-	std::string GetBinary(AString*) const;
-	std::string name; // обозначение операции 
+	std::string GetBinary(SymbString*) const;
+	std::string m_name; // обозначение операции 
 };
 extern ShowBin show_bin;  // Определениие в ShowBin.cpp
 

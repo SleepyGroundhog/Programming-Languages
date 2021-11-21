@@ -6,11 +6,11 @@
 
 class ShowDec : public Action {
 public:
-	ShowDec() : name("Show decimal value") {}
-	void Operate(AString*);
-	const std::string& GetName() const { return name; }
+	ShowDec() : m_name("Показать десятичное представление строки") {}
+	void operate(SymbString*);
+	const std::string& getName() const { return m_name; }
 private:
-	std::string name; // обозначение операции 
+	std::string m_name; // обозначение операции 
 };
 extern ShowDec show_dec;  // Определениие в ShowDec.cpp
 

@@ -2,15 +2,15 @@
 #ifndef ACTION_H 
 #define ACTION_H
 
-#include "AString.h" 
+#include "SymbString.h" 
 
 class Action {
 public:
 	virtual ~Action() {}
-	virtual void Operate(AString*) = 0;
-	virtual const std::string& GetName() const = 0;
+	virtual void operate(SymbString*) = 0;
+	virtual const std::string& getName() const = 0;
 protected:
-	long GetDecimal(AString* pObj) const;
+	long GetDecimal(SymbString* object) const;
 };
 
 #endif // ACTION_H

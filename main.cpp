@@ -1,8 +1,7 @@
 // Main.cpp 
 #include <iostream>
-#include "AString.h" 
 #include "SymbString.h"
-#include "HexString.h"
+#include "OctString.h"
 #include "Action.h" 
 #include "ShowStr.h" 
 #include "ShowDec.h"
@@ -11,30 +10,33 @@
 #include "Menu.h"
 using namespace std;
 
-Action* pActs[] = { &show_str, &show_dec, &show_bin };
-vector<Action*> actionList(pActs, pActs + sizeof(pActs) / sizeof(Action*));
-
 int main() {
+	setlocale(LC_ALL, "");
 	Factory factory;
-	Menu    menu(actionList);
-	JobMode jobMode;
-	
-	while ((jobMode = menu.SelectJob()) != Exit) {
-		switch (jobMode) {
-		case AddObj: factory.AddObject();
-			break;
-		case DelObj: factory.DeleteObject();
-			break;
-		case WorkWithObj:
-			AString* pObj = menu.SelectObject(factory);
-			Action* pAct = menu.SelectAction(pObj);
-			if (pAct)
-				pAct->Operate(pObj);
+	Menu menu;
+	Act operation;
+	while ((operation = menu.selectJob()) != Exit) {
+		switch (operation) {
+		case AddObj: {
+			factory.addObject();
 			break;
 		}
-		cin.get();
+		case DeleteObj: {
+			factory.deleteObject();
+			break;
+		}
+		case DisplayObj: { // Отображение объекта - один операнд
+			SymbString* object = menu.selectObject(factory);
+			Action* pAct = menu.selectAction(object);
+			if (pAct)
+				pAct->operate(object);
+			break;
+		} 
+		case SumObj: {
+			cout << "\nОперация не реализована\n\n"; // Сложение объектов - два операнда
+			break;
+		}
+		}
 	}
-
-	cout << "Bye!\n";
 	return 0;
 }
