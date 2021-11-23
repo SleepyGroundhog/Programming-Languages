@@ -1,6 +1,5 @@
-// HexString.h
-#ifndef HEXSTRING_H
-#define HEXSTRING_H
+#ifndef OCTSTRING_H
+#define OCTSTRING_H
 
 #include <string>
 #include "SymbString.h"
@@ -17,4 +16,4 @@ public:
 	SymbString* operator+(SymbString object2);
 };
 
-#endif // HEXSTRING_H
+#endif // OCTSTRING_H

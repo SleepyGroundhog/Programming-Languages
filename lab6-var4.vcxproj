@@ -142,12 +142,12 @@
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="OctString.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
     <ClInclude Include="OctString.h" />
-    <ClInclude Include="Menu.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="SymbString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

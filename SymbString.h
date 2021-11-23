@@ -1,4 +1,3 @@
-// SymbString.h
 #ifndef SIMBSTRING_H
 #define SIMBSTRING_H
 

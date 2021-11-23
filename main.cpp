@@ -1,6 +1,5 @@
-// Main.cpp 
 #include <iostream>
-#include "Menu.h"
+#include "UI.h"
 using namespace std;
 
 int main() {
@@ -18,8 +17,7 @@ int main() {
 			break;
 		case DisplayObj:
 			object1 = factory.selectObject();
-			if (object1)
-				object1->showString();
+			if (object1) { object1->showString(); cout << "\n"; }
 			break;
 		case DisplayAllObj:
 			factory.print();
@@ -31,6 +29,7 @@ int main() {
 				if (object1 && object2) {
 					SymbString* temp = (*object1 + *object2);
 					temp->showString();
+					cout << "\n";
 					delete temp;
 				}
 			}

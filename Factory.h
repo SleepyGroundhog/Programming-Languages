@@ -1,4 +1,3 @@
-// Factory.h
 #ifndef FACTORY_H 
 #define FACTORY_H
 
@@ -14,7 +13,7 @@ public:
 	void        print();
 	SymbString* selectObject() const;
 private:
-	std::vector<SymbString*> object;
+	std::vector<SymbString*> m_object;
 };
 
 #endif // FACTORY_H 

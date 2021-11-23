@@ -1,4 +1,3 @@
-// HexStrIng.cpp 
 #include <iostream>
 #include "OctString.h"
 using namespace std;
@@ -10,7 +9,7 @@ bool isOctStringValue(string str) {
 	return true;
 }
 	
-OctString::OctString(string name, string value) : SymbString(name) {
+OctString::OctString(string id, string value) : SymbString(id) {
 	if(isOctStringValue(value))
 		m_value = value;
 }

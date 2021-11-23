@@ -1,6 +1,5 @@
-// Menu.h 
-#ifndef MENU_H
-#define MENU_H
+#ifndef UI_H
+#define UI_H
 
 #include <vector>
 #include "SymbString.h"
@@ -14,4 +13,4 @@ public:
 	static int        readCode(int);
 };
 
-#endif // MENU_H
+#endif // UI_H

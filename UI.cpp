@@ -1,20 +1,13 @@
-// Menu.cpp
 #include <iostream>
 #include <string>
 #include "SymbString.h"
 #include "OctString.h" 
-#include "Menu.h"
+#include "UI.h"
 
 using namespace std;
 
 Operations UI::readOperation() {
-	cout << "Выберите операцию:\n";
-	cout << "1. Создать объект\n";
-	cout << "2. Удалить объект\n";
-	cout << "3. Отобразить объект\n";
-	cout << "4. Отобразить все объекты\n";
-	cout << "5. Сложить два объекта\n";
-	cout << "6. Выйти\n\n";
+	cout << "Введите код операции:\n\n";
 	int code = readCode(6);
 	return (Operations)(code - 1);
 }
