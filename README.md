@@ -10,6 +10,7 @@
  - var 4 - Being redone for AISD (not pushed)
 
 # Programming-Languages---lab-6
+ - example from book
  - var 4 - SymbString and OctString classes with virtual functions and inheritance
 
 # Programming-Languages---lab-7
