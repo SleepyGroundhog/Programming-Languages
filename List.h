@@ -1,68 +1,76 @@
 #pragma once
 #include <initializer_list>
 
-template <class value_type> class Node {
-public:
-	value_type        m_value;
-	Node<value_type>* m_next;
-	Node<value_type>* m_prev;
-	
-	Node(value_type);
+template <class T> class List;
 
+template <class T> class Node {
+	friend List<T>;
+public:
+	T        m_value;
+	Node<T>* m_next;
+	Node<T>* m_prev;
+	Node(T);
 private:
 	Node();
 };
 
-template <class value_type> class List {
+template <class T> class List {
 public:
 	List();
 	List(const List&);
-	List(const std::initializer_list<value_type>&);
+	List(const std::initializer_list<T>&);
 	//List(Iterator, Iterator);
 	~List();
 
 	List& operator=(const List&);
-	
-	//operator value_type();
-
-	//Iterator begin() const;
-	//Iterator end()   const;
 
 	size_t size() const;
 	void   clear();
 
-	void pop_back();
-	void push_back(value_type);
-	void print(bool = true);
+	void pop_back();          // Удаляет элемент из конца списка
+	void push_back(T);        // Добавляет элемент в конец списка
+	void print(bool = true);  // Выводит значения всех элементов списка или сообщение об ошибке
 	
-	value_type* iter();              // Возвращает указатель на текущий элемент списка
-	void first();             // Перемещает итератор в начало списка
-	void last();              // Перемещает итератор в конец списка
-	void next();              // Перемещает итератор к следующему элементу или, если конец списка - к началу
-	void prev();              // Перемещает итератор к предидущему элементу или, если начало списка - в конец
-	void skip(int);           // Перемещает итератор вперед или назад на переданное в качестве параметра количество элементов
-	
+	/*
+	T* iter();			      // Возвращает указатель на текущий элемент списка
+	void first();		      // Перемещает итератор в начало списка
+	void last();		      // Перемещает итератор в конец списка
+	void next();			  // Перемещает итератор к следующему элементу или, если конец списка - к началу
+	void prev();			  // Перемещает итератор к предидущему элементу или, если начало списка - в конец
+	void skip(int);			  // Перемещает итератор вперед или назад на переданное в качестве параметра количество элементов
+	*/
 
+
+	// Класс-итератор для класса List
 	class Iterator {
+		friend class List;
 	public:
+		Iterator(const Iterator&);
+		Iterator& operator=(const Iterator&);
 		Iterator& operator++();
-		Iterator& operator++(int);
+		Iterator  operator++(int);
 		Iterator& operator--();
-		Iterator& operator--(int);
-		value_type operator*();
-		value_type operator->();
+		Iterator  operator--(int);
+		Iterator& operator+=(size_t);
+		Iterator& operator-=(size_t);
+		T& operator*();
+
+		bool operator!=(const List<T>::Iterator&) const;
 
 	private:
-
-
+		Iterator(Node<T>*);
+		Node<T>* m_selected_node;
 	};
 
-private:
-	Node<value_type>*   m_first;     // Указатель на первый узел списка
-	Node<value_type>*   m_last;      // Указатель на последний узел списка
-	Node<value_type>*   m_current;   // Указатель на узел списка соответствующий положению итератора
-	size_t              m_size;      // Количество элементов в списке
+	Iterator begin() const;
+	Iterator end() const;
 
+private:
+	Node<T>*   m_first;    // Указатель на первый узел списка
+	Node<T>*   m_last;     // Указатель на последний узел списка
+	Node<T>*   m_end;
+	Node<T>*   m_current;  // Указатель на узел списка соответствующий положению итератора
+	size_t     m_size;     // Количество элементов в списке
 };
 
 

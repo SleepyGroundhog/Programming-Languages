@@ -4,19 +4,20 @@
 
 // Конструкторы класса Node
 
-template <class value_type> Node<value_type>::Node() : m_next(0), m_prev(0) {}
+template <class T> Node<T>::Node() : m_next(0), m_prev(0) {}
 
-template <class value_type> Node<value_type>::Node( value_type value ) : Node() { m_value = value; }
+template <class T> Node<T>::Node( T value ) : Node() { m_value = value; }
+
 
 
 
 // Конструкторы и деструктор класса List
 
-template <class value_type> List<value_type>::List() : m_first(0), m_last(0), m_current(0), m_size(0) {}
+template <class T> List<T>::List() : m_first(0), m_last(0), m_current(0), m_size(0), m_end(new Node<T>) {}
 
-template <class value_type> List<value_type>::List(const List& list) : List() { *this = list; }
+template <class T> List<T>::List(const List& list) : List() { *this = list; }
 
-template <class value_type> List<value_type>::List(const std::initializer_list<value_type>& uniform_list) : List() { 
+template <class T> List<T>::List(const std::initializer_list<T>& uniform_list) : List() { 
 	for (auto& element : uniform_list) push_back(element);
 }
 
@@ -24,10 +25,10 @@ template <class value_type> List<value_type>::List(const std::initializer_list<v
 
 // Перегрузка операторов для класса List
 
-template <class value_type> List<value_type>& List<value_type>::operator=(const List& list) {
+template <class T> List<T>& List<T>::operator=(const List& list) {
 	if (this != &list) {
 		clear();
-		Node<value_type>* current = list.m_first;
+		Node<T>* current = list.m_first;
 		while (current != 0) {
 			push_back(current->m_value);
 			current = current->m_next;
@@ -41,49 +42,50 @@ template <class value_type> List<value_type>& List<value_type>::operator=(const 
 
 // Функциональные методы
 
-template <class value_type> size_t List<value_type>::size() const { return m_size; }
+template <class T> size_t List<T>::size() const { return m_size; }
 
-template <class value_type> void List<value_type>::clear() {
+template <class T> void List<T>::clear() {
 	while (size() != 0) {
 		pop_back();
 	}
 }
 
-template <class value_type> void List<value_type>::pop_back() {
+template <class T> void List<T>::pop_back() {
 	if (m_size == 0) throw (std::logic_error( "empty list deleting" ));
 	if (m_size == 1) {
 		delete m_last;
 		m_first = m_last = 0;
+		m_last->m_next = m_end;
 	} else {
-		Node<value_type>* new_last = m_last->m_prev;
-		delete m_last;
-		new_last->m_next = m_first;
-		m_last = new_last;
+		m_last = m_last->m_prev;
+		delete m_last->m_next;
+		m_last->m_next = 0;
 	}
 	--m_size;
 }
 
-template <class value_type> void List<value_type>::push_back(value_type new_element) {
-	Node<value_type>* new_node = new Node<value_type>(new_element);
-	if (m_size == 0) m_first = m_last = new_node;
-	else {
+template <class T> void List<T>::push_back(T new_element) {
+	Node<T>* new_node = new Node<T>(new_element);
+	if (m_size == 0) {
+		m_first = m_last = new_node;
+		m_first->m_next = 0;
+		m_first->m_prev = 0;
+	} else {
 		new_node->m_prev = m_last;
-		m_last->m_next = new_node;
 		m_last = new_node;
+		m_last->m_next = 0;
 	}
-	m_first->m_prev = m_last; // Замыкаем список для того, чтобы выполнение итераций было безопасным
-	m_last->m_next = m_first;
 	++m_size;
 }
-
-template <class value_type> void List<value_type>::print(bool newline) {
+/*
+template <class T> void List<T>::print(bool newline) {
 	if (size() == 0) std::cout << "list is empty";
 	else if (size() == 1) std::cout << m_first->m_value;
 	else {
-		Node<value_type>* saved_current = m_current;
-		Node<value_type>* current = m_first;
+		Node<T>* saved_current = m_current;
+		Node<T>* current = m_first;
 		first();
-		for (int i = 0; i < size(); ++i) {
+		for (unsigned i = 0; i < size(); ++i) {
 			std::cout << *iter() << " ";
 			next();
 		}
@@ -91,27 +93,90 @@ template <class value_type> void List<value_type>::print(bool newline) {
 	}
 	if (newline) std::cout << "\n";
 }
-
-template <class value_type> List<value_type>::~List() { clear(); }
+*/
+template <class T> List<T>::~List() { clear(); }
 
 
 
 // Методы для выполнения перемещения по списку (методы-итераторы)
-
-template <class value_type> value_type* List<value_type>::iter() {
+/*
+template <class T> T* List<T>::iter() {
 	if (m_current == 0) m_current = m_first;
 	return &m_current->m_value;
 }
 
-template <class value_type> void List<value_type>::first() { m_current = m_first; }
+template <class T> void List<T>::first() { m_current = m_first; }
 
-template <class value_type> void List<value_type>::last() { m_current = m_last; }
+template <class T> void List<T>::last() { m_current = m_last; }
 
-template <class value_type> void List<value_type>::next() { m_current = m_current->m_next; }
+template <class T> void List<T>::next() { m_current = m_current->m_next; }
 
-template <class value_type> void List<value_type>::prev() { m_current = m_current->m_prev; }
+template <class T> void List<T>::prev() { m_current = m_current->m_prev; }
 
-template <class value_type> void List<value_type>::skip(int count) {
+template <class T> void List<T>::skip(int count) {
 	if (count >= 0) while (count != 0) { next(); --count; }
 	else while (count != 0) { prev(); ++count; }
+}
+*/
+template <class T> typename List<T>::Iterator List<T>::begin() const {
+	return List<T>::Iterator(m_first);
+}
+
+template <class T> typename List<T>::Iterator List<T>::end() const {
+	return List<T>::Iterator(0);
+}
+
+
+// Методы и конструкторы вложенного класса Iterator
+
+template <class T> List<T>::Iterator::Iterator(Node<T>* node) {  m_selected_node = node; }
+
+template <class T> List<T>::Iterator::Iterator(const Iterator& iterator) { *this = iterator; }
+
+template <class T> typename List<T>::Iterator& List<T>::Iterator::operator=(const Iterator& iterator) {
+	if (this != &iterator)
+		m_selected_node = iterator.m_selected_node;
+	return *this;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::Iterator::operator++() {
+	m_selected_node = m_selected_node->m_next;
+	return *this;
+}
+
+template <class T> typename List<T>::Iterator List<T>::Iterator::operator++(int) {
+	List<T>::Iterator temp(*this);
+	m_selected_node = m_selected_node->m_next;
+	return temp;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::Iterator::operator--() {
+	m_selected_node = m_selected_node->m_prev;
+	return *this;
+}
+
+template <class T> typename List<T>::Iterator List<T>::Iterator::operator--(int) {
+	List<T>::Iterator temp(*this);
+	m_selected_node = m_selected_node->m_prev;
+	return temp;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::Iterator::operator+=(size_t count) {
+	for (int i = 0; i < count; ++i)
+		++(*this);
+	return *this;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::Iterator::operator-=(size_t count) {
+	for (int i = 0; i < count; ++i)
+		--(*this);
+	return *this;
+}
+
+template <class T> T& List<T>::Iterator::operator*() {
+	return m_selected_node->m_value;
+}
+
+template <class T> bool List<T>::Iterator::operator!=(const typename List<T>::Iterator& right) const {
+	return m_selected_node != right.m_selected_node;
 }

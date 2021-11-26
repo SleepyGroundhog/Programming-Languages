@@ -4,21 +4,21 @@
 // Класс реализующий растущий динамический массив
 //
 
-template <class value_type> class Array {
+template <class T> class Array {
 public:
-	using Iterator = value_type*;
+	using Iterator = T*;
 
-	Array(size_t = minsize);                         // Конструктор по размеру / по умолчанию
-	Array(const Array&);                             // Конструктор глубокого копирования
-	Array(const std::initializer_list<value_type>&); // Конструктор для uniform-инициализации
-	Array(Iterator, Iterator);                       // Конструктор через два итератора
-	~Array();                                        // Деструктор
+	Array(size_t = minsize);                 // Конструктор по размеру / по умолчанию
+	Array(const Array&);                     // Конструктор глубокого копирования
+	Array(const std::initializer_list<T>&);  // Конструктор для uniform-инициализации
+	Array(Iterator, Iterator);               // Конструктор через два итератора
+	~Array();                                // Деструктор
 
 	Array& operator=(const Array&);     // Оператор глубокого копирования
-	value_type& operator[](size_t);     // Оператор индексации с проверкой допустимости диапазона
+	T& operator[](size_t);              // Оператор индексации с проверкой допустимости диапазона
 
 	Iterator begin() const;             // Указатель на начало блока памяти массива
-	Iterator end() const;               // Указатель на конец рабочей области массива
+	Iterator end() const;               // Указатель на элемент массива, следующий за последним
 
 	size_t   size() const;              // Получить размер рабочей области массива
 	size_t   capacity() const;          // Получить размер выделенного в массиве блока памяти
@@ -27,14 +27,14 @@ public:
 
 	void     pop_back();                // Удаляет последний элемент массива или, если массив пуст, выбрасывает исключение
 	                                    // типа std::logic_error
-	void     push_back(value_type);     // Добавляет элемент в конец массива, при необъходимости увеличивает размер
+	void     push_back(T);              // Добавляет элемент в конец массива, при необъходимости увеличивает размер
 	void     print(bool = true) const;  // Выводит все элементы массива или сообщение, что массив пуст. Параметр - добавить
 			    					    // перенос строки в конец
 
 private:
 	static size_t    minsize;           // Минимально выделяемый блок памяти
 	static size_t    maxsize;           // Максимально допустимый размер блока памяти
-	value_type*      m_elements;        // Указатель на блок элементов массива
+	T*               m_elements;        // Указатель на блок элементов массива
 	size_t           m_allocsize;       // Размер выделеного в куче блока памяти
 	size_t           m_size;            // Размер рабочей области массива
 
