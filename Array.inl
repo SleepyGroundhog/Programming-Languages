@@ -11,26 +11,30 @@ inline void debug(std::string debug_msg) {
 template <class value_type> size_t Array<value_type>::minsize = 10;
 template <class value_type> size_t Array<value_type>::maxsize = 10000;
 
-// Конструкторы и деструкторы
+// Конструкторы и деструктор класса Array
 
-template <class value_type> Array<value_type>::Array( size_t allocsize ) : m_elements( 0 ), m_allocsize( allocsize ), m_size( 0 ) {
+template <class value_type> Array<value_type>::Array( size_t allocsize )
+	: m_elements(0), m_allocsize(0), m_size(0) {
 	allocate ( allocsize );
 }
 
-template <class value_type> Array<value_type>::Array( const Array& array ) : m_elements( 0 ), m_allocsize( 0 ), m_size( 0 ) {
+template <class value_type> Array<value_type>::Array( const Array& array )
+	: Array() {
 	*this = array;
 }
 
-template <class value_type> Array<value_type>::Array( const std::initializer_list<value_type>& list ) : Array(list.size()) {
+template <class value_type> Array<value_type>::Array( const std::initializer_list<value_type>& uniform_list )
+	: Array(uniform_list.size()) {
 	int i = 0;
-	for (auto& element : list) {
+	for (auto& element : uniform_list) {
 		m_elements[i] = element;
 		++i;
 	}
-	m_size = list.size();
+	m_size = uniform_list.size();
 }
 
-template <class value_type> Array<value_type>::Array(Iterator first, Iterator last) : m_elements( 0 ), m_allocsize( 0 ), m_size( 0 ) {
+template <class value_type> Array<value_type>::Array(Iterator first, Iterator last)
+	: Array() {
 	if (first > last)
 		throw (std::logic_error( "invalid iterators order" ));
 	Array created;
@@ -66,14 +70,17 @@ template <class value_type> Array<value_type>& Array<value_type>::operator=( con
 
 
 
-// Методы доступа
+// Итераторы
 
-template <class value_type> size_t Array<value_type>::size()     const { return m_size; }
-template <class value_type> size_t Array<value_type>::capacity() const { return m_allocsize; }
-
+template <class value_type> value_type* Array<value_type>::begin() const { return m_elements; }
+template <class value_type> value_type* Array<value_type>::end()   const { return (m_elements + m_size); }
 
 
 // Функциональные методы
+
+template <class value_type> size_t Array<value_type>::size()     const { return m_size; }
+
+template <class value_type> size_t Array<value_type>::capacity() const { return m_allocsize; }
 
 template <class value_type> void Array<value_type>::pop_back() {
 	if (m_size) --m_size;
@@ -87,11 +94,38 @@ template <class value_type> void Array<value_type>::push_back( value_type new_el
 	++m_size;
 }
 
-template <class value_type> void Array<value_type>::print() const {
-	for (unsigned i = 0; i < size(); ++i) {
-		std::cout << m_elements[i] << " ";
+template <class value_type> void Array<value_type>::print(bool newline) const {
+	if (size() == 0) {
+		std::cout << "array is empty";
+		if (newline) std::cout << "\n";
+		return;
 	}
-	std::cout << "\n";
+	for ( auto element : *this )
+		std::cout << element << " ";
+	if (newline) std::cout << "\n";
+}
+
+template <class value_type> void Array<value_type>::clear() { resize(10); m_size = 0; }
+
+template <class value_type> void Array<value_type>::resize(size_t reallocsize) {
+	debug("array reallocation");
+	if (reallocsize > maxsize)
+		throw(std::invalid_argument("array too long"));
+	if (reallocsize == m_allocsize) return;
+	if (reallocsize == 0) {
+		free();
+		m_elements = 0;
+	}
+	else {
+		value_type* new_elements = new value_type[reallocsize];
+		m_allocsize = reallocsize;
+		if (m_size > reallocsize)
+			m_size = reallocsize;
+		for (unsigned i = 0; i < m_size; ++i)
+			new_elements[i] = m_elements[i];
+		free();
+		m_elements = new_elements;
+	}
 }
 
 
@@ -113,22 +147,3 @@ template <class value_type> void Array<value_type>::free() {
 	}
 }
 
-template <class value_type> void Array<value_type>::resize( size_t reallocsize ) {
-	debug("array reallocation");
-	if (reallocsize > maxsize)
-		throw(std::invalid_argument( "array too long" ));
-	if (reallocsize == m_allocsize) return;
-	if (reallocsize == 0) {
-		free();
-		m_elements = 0;
-	} else {
-		value_type* new_elements = new value_type [ reallocsize ];
-		m_allocsize = reallocsize;
-		if (m_size > reallocsize )
-			m_size = reallocsize;
-		for ( unsigned i = 0; i < m_size; ++i )
-			new_elements [ i ] = m_elements [ i ];
-		free();
-		m_elements = new_elements;
-	}
-}
