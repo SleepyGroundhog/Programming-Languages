@@ -20,15 +20,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Array.inl">
+    <None Include="List.inl">
       <Filter>Исходные файлы</Filter>
     </None>
-    <None Include="List.inl">
+    <None Include="List-Iterator.inl">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Array.inl">
       <Filter>Исходные файлы</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="List-Iterator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Array.h">
