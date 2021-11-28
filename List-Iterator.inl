@@ -1,10 +1,5 @@
 #include "List-Iterator.h"
 
-// Формат оформления функций - построчно :
-// Определение шаблона;
-// Возвращаемый тип (для конструкторов пропускается);
-// Определение функции.
-
 template <class T>
 typename List<T>::Iterator
 List<T>::begin() const {

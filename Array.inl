@@ -2,12 +2,6 @@
 #include <stdexcept>
 #include <iostream>
 
-inline void debug(std::string debug_msg) {
-    #ifdef _DEBUG
-	std::cout << "Debug: " << debug_msg << "\n";
-    #endif
-}
-
 template <class T> size_t Array<T>::minsize = 10;
 template <class T> size_t Array<T>::maxsize = 10000;
 
@@ -90,8 +84,8 @@ template <class T> void Array<T>::pop_back() {
 template <class T> void Array<T>::push_back( T new_element ) {
 	if (size() >= capacity())
 		resize(std::min(capacity() + 10, maxsize));
-	m_elements[size()] = new_element;
 	++m_size;
+	m_elements[size() - 1] = new_element;
 }
 
 template <class T> void Array<T>::print(bool newline) const {
@@ -108,7 +102,6 @@ template <class T> void Array<T>::print(bool newline) const {
 template <class T> void Array<T>::clear() { resize(10); m_size = 0; }
 
 template <class T> void Array<T>::resize(size_t reallocsize) {
-	debug("array reallocation");
 	if (reallocsize > maxsize)
 		throw(std::invalid_argument("array too long"));
 	if (reallocsize == m_allocsize) return;
