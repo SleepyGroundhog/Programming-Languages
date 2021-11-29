@@ -2,22 +2,25 @@
 #include <stdexcept>
 #include <iostream>
 
-template <class T> size_t Array<T>::minsize = 10;
-template <class T> size_t Array<T>::maxsize = 10000;
+//template <class T> size_t Array<T>::minsize = 10;
+//template <class T> size_t Array<T>::maxsize = 10000;
 
 // Конструкторы и деструктор класса Array
 
-template <class T> Array<T>::Array( size_t allocsize )
+//template <class T>
+Array<T>::Array( size_t allocsize )
 	: m_elements(0), m_allocsize(0), m_size(0) {
 	allocate ( allocsize );
 }
 
-template <class T> Array<T>::Array( const Array& array )
+//template <class T>
+Array<T>::Array( const Array& array )
 	: Array() {
 	*this = array;
 }
 
-template <class T> Array<T>::Array( const std::initializer_list<T>& uniform_list )
+//template <class T>
+Array<T>::Array( const std::initializer_list<T>& uniform_list )
 	: Array(uniform_list.size()) {
 	int i = 0;
 	for (auto& element : uniform_list) {
@@ -27,7 +30,8 @@ template <class T> Array<T>::Array( const std::initializer_list<T>& uniform_list
 	m_size = uniform_list.size();
 }
 
-template <class T> Array<T>::Array(Iterator first, Iterator last)
+//template <class T>
+Array<T>::Array(Iterator first, Iterator last)
 	: Array() {
 	if (first > last)
 		throw (std::logic_error( "invalid iterators order" ));
@@ -37,19 +41,22 @@ template <class T> Array<T>::Array(Iterator first, Iterator last)
 	*this = created;
 }
 
-template <class T> Array<T>::~Array() { free(); }
+//template <class T>
+Array<T>::~Array() { free(); }
 
 
 
 // Перегрузки операторов
 
-template <class T> T& Array<T>::operator[]( size_t index ) {
+//template <class T>
+T& Array<T>::operator[]( size_t index ) {
 	if (0 <= index && index < size() )
 		return m_elements[ index ];
 	else throw ( std::out_of_range( "out of range" ));
 }
 
-template <class T> Array<T>& Array<T>::operator=( const Array& array ) {
+//template <class T>
+Array<T>& Array<T>::operator=( const Array& array ) {
 	if ( this != &array ) {
 		free();
 		m_allocsize = array.m_allocsize;
@@ -66,29 +73,36 @@ template <class T> Array<T>& Array<T>::operator=( const Array& array ) {
 
 // Итераторы
 
-template <class T> T* Array<T>::begin() const { return m_elements; }
-template <class T> T* Array<T>::end()   const { return (m_elements + m_size); }
+//template <class T>
+T* Array<T>::begin() const { return m_elements; }
+//template <class T>
+T* Array<T>::end()   const { return (m_elements + m_size); }
 
 
 // Функциональные методы
 
-template <class T> size_t Array<T>::size()     const { return m_size; }
+//template <class T>
+size_t Array<T>::size()     const { return m_size; }
 
-template <class T> size_t Array<T>::capacity() const { return m_allocsize; }
+//template <class T>
+size_t Array<T>::capacity() const { return m_allocsize; }
 
-template <class T> void Array<T>::pop_back() {
+//template <class T>
+void Array<T>::pop_back() {
 	if (m_size) --m_size;
 	else throw (std::logic_error("empty array deleting"));
 }
 
-template <class T> void Array<T>::push_back( T new_element ) {
+//template <class T>
+void Array<T>::push_back( T new_element ) {
 	if (size() >= capacity())
 		resize(std::min(capacity() + 10, maxsize));
 	++m_size;
 	m_elements[size() - 1] = new_element;
 }
 
-template <class T> void Array<T>::print(bool newline) const {
+//template <class T>
+void Array<T>::print(bool newline) const {
 	if (size() == 0) {
 		std::cout << "array is empty";
 		if (newline) std::cout << "\n";
@@ -99,9 +113,11 @@ template <class T> void Array<T>::print(bool newline) const {
 	if (newline) std::cout << "\n";
 }
 
-template <class T> void Array<T>::clear() { resize(10); m_size = 0; }
+//template <class T>
+void Array<T>::clear() { resize(10); m_size = 0; }
 
-template <class T> void Array<T>::resize(size_t reallocsize) {
+//template <class T>
+void Array<T>::resize(size_t reallocsize) {
 	if (reallocsize > maxsize)
 		throw(std::invalid_argument("array too long"));
 	if (reallocsize == m_allocsize) return;
@@ -125,7 +141,8 @@ template <class T> void Array<T>::resize(size_t reallocsize) {
 
 // Приватные методы для работы с динамической памятью
 
-template <class T> void Array<T>::allocate( size_t allocsize ) {
+//template <class T>
+void Array<T>::allocate( size_t allocsize ) {
 	if (allocsize > maxsize)
 		throw(std::invalid_argument( "array too long" ));
 	if (allocsize < minsize) allocsize = minsize;
@@ -133,7 +150,8 @@ template <class T> void Array<T>::allocate( size_t allocsize ) {
 	m_elements  = new T [ m_allocsize ];
 }
 
-template <class T> void Array<T>::free() {
+//template <class T>
+void Array<T>::free() {
 	if (m_elements) {
 		delete[] m_elements;
 		m_elements = 0;

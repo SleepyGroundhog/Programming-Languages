@@ -53,7 +53,6 @@ Array<double> processContainer2(double* begin, double* end) {
 	Array<double> modified(end - begin + 2);
 	double min = findMin(begin, end);
 	double* it = begin;
-	int i = 0;
 	while (it != end) {
 		modified.push_back(*it * min);
 		++it;
@@ -86,15 +85,20 @@ List<double>::Iterator processContainer4(List<double>& list) {
 	return iter;
 }
 
-template <class I>
-void processContainerIter(I begin, I end) {
+template <class C, class I>
+C processContainerIter(I begin, I end) {
+	C modified;
 	double min = findMin(begin, end);
-	
+	double add1 = findSum(begin, end);
+	double add2 = findAverageByAbs(begin, end);
 	I iter = begin;
 	while (iter != end) {
-		(*iter) *= min;
+		modified.push_back((*iter) * min);
 		++iter;
 	}
+	modified.push_back(add1);
+	modified.push_back(add2);
+	return modified;
 }
 
 int main() {
@@ -177,10 +181,7 @@ int main() {
 			while ((std::cin >> a >> b) && (a < 0 || b > size || a >= b))
 				std::cout << "Некорректное смещение! Введите смещение : ";
 			std::cout << "Результирующий контейнер: \n";
-			processContainerIter(ctnr5.begin() + a, ctnr5.begin() + b);
-			ctnr5.push_back(add1);
-			ctnr5.push_back(add2);
-			ctnr5.print();
+			processContainerIter<List<double>>(ctnr5.begin() + a, ctnr5.begin() + b).print();
 			break;
 		}
 		case 6:
@@ -195,10 +196,7 @@ int main() {
 			while ((std::cin >> a >> b) && (a < 0 || b > size || a >= b))
 				std::cout << "Некорректное смещение! Введите смещение : ";
 			std::cout << "Результирующий контейнер: \n";
-			processContainerIter(ctnr6.begin() + a, ctnr6.begin() + b);
-			ctnr6.push_back(add1);
-			ctnr6.push_back(add2);
-			ctnr6.print();
+			processContainerIter<Array<double>>(ctnr6.begin() + a, ctnr6.begin() + b).print();
 			break;
 		}
 		}

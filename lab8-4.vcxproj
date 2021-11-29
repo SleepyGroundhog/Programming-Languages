@@ -142,9 +142,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Array.inl" />
-    <None Include="List-Iterator.inl" />
-    <None Include="List.inl" />
+    <None Include="Array.cpp" />
+    <None Include="List-Iterator.cpp" />
+    <None Include="List.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />

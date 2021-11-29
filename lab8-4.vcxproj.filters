@@ -20,13 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="List.inl">
+    <None Include="List.cpp">
       <Filter>Исходные файлы</Filter>
     </None>
-    <None Include="List-Iterator.inl">
+    <None Include="List-Iterator.cpp">
       <Filter>Исходные файлы</Filter>
     </None>
-    <None Include="Array.inl">
+    <None Include="Array.cpp">
       <Filter>Исходные файлы</Filter>
     </None>
   </ItemGroup>
