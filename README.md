@@ -17,7 +17,7 @@
  - var 4 - Function for convertion hours and minutes to seconds with exceptions (uploaded to AISD)
 
 # Programming-Languages---lab-8
-
+ - var 4 - Two container classes Array and List, Iterator class for List and functions for modificate containers
 
 # Programming-Languages---lab-9
 
