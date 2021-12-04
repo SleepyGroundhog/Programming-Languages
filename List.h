@@ -1,4 +1,7 @@
 #pragma once
+#include <cassert>
+#include <stdexcept>
+#include <iostream>
 
 template <class value_t>
 class List {
@@ -7,12 +10,37 @@ private:
 public:
 	class Iterator;           
 
-	List() : tail_next(new Node), head(tail_next), tail(tail_next), count(0) {}
-	List(const List& list) : List() { *this = list; }
-	List(const List::Iterator&, const List::Iterator&);
-    ~List() { clear(); delete tail_next; }
+	List() : head(new Node), tail(new Node), count (0) {
+		tail->prev = head;
+		head->next = tail;
+	}
 
-	List& operator=(const List&);
+	List(const List& list) : List() { *this = list; }
+
+	List(const List::Iterator& begin, const List::Iterator& end)
+		: List() {
+		Iterator it = begin;
+		while ( it != end ) {
+			push_back( *it );
+			++it;
+		}
+	}
+
+	~List() {
+		clear();
+		delete tail;
+		delete head;
+	}
+
+	List& operator=(const List& list) {
+		if (this != &list) {
+			clear();
+			for (auto element : list) {
+				push_back(element);
+			}
+		}
+		return *this;
+	}
 
 	bool isEmpty() { return count == 0; }
 	
@@ -20,27 +48,67 @@ public:
 
 	void clear() { while ( !isEmpty() ) pop_back(); }
 
-	void pop_back();         
-	void push_back(value_t); 
-	void print(bool newline = true); 	 
+	void push_front(value_t new_element) {
+		Node* new_node = new Node(new_element);
+		link_node(new_node, head, head->next);
+		++count;
+	}
 
-	Iterator begin() const { return Iterator(head); }
-	Iterator end() const { tail_next->prev = tail; return Iterator(tail_next); }
+	void push_back(value_t new_element) {
+		Node* new_node = new Node(new_element);
+		link_node(new_node, tail->prev, tail);
+		++count;
+	}
+
+	void pop_back() {
+		if ( isEmpty() ) throw (std::out_of_range("empty list deleting"));
+		remove ( tail->prev );
+		--count;
+	}
+
+	void pop_front() {
+		if ( isEmpty() ) throw (std::out_of_range("empty list deleting"));
+		remove ( head->next );
+		--count;
+	}
+
+	void print(bool newline = true) {
+		if ( isEmpty() ) std::cout << "list is empty";
+		for (auto& element : *this) {
+			std::cout << element << " ";
+		}
+		if (newline) std::cout << "\n";
+	}
+
+	Iterator begin() const { return Iterator(head->next); }
+	Iterator end()   const { return Iterator(tail); }
 
 private:
-	Node*   head;    
-	Node*   tail;     
+	Node*   head;   // fictitious element to mark list begin
+	Node*   tail;   // fictitious element to mark list end
 	size_t  count;  // used for counting list nodes
 
-	// fictitious elements
-	Node* tail_next;
-  //Node* first_prev;
+	void link_node(Node* node, Node* prev, Node* next) {
+		assert(prev->next == next && next->prev == prev && "Nodes is not adjacent - memory leaking");
+		node->next = next;
+		node->prev = prev;
+		next->prev = node;
+		prev->next = node;
+	}
+
+	void remove(Node* node) { // Может работать не совсем корректно
+		if (node == head || node == tail) throw(std::logic_error("removing fictitiout element"));
+		Node* temp = node;
+		node->prev->next = node->next;
+		node->next->prev = node->prev;
+		delete temp;
+	}
 
 	class Node {
+	private:
 		friend List;
 		friend List::Iterator;
 
-	public:
 		value_t  value;
 		Node*    next;
 		Node*    prev;
@@ -51,68 +119,61 @@ private:
 	
 };
 
-#include "List.inl"
 
-template <class value_t> class List<value_t>::Iterator {
+template <class value_t>
+class List<value_t>::Iterator {
 	friend class List;
 public:
-
 	Iterator(const Iterator& iterator) { *this = iterator; }
 	Iterator& operator=(const Iterator& iterator) { if (this != &iterator) { it = iterator.it; } return *this; }
 
 	Iterator& operator++() {
-		if (it->next == 0) { // если it указывает на фиктивный элемент
-			throw (std::logic_error("list iterator out of range"));
+		if (it->next == 0) { // if it is fictitious element
+			throw (std::out_of_range("list out of range"));
 		}
 		it = it->next;
 		return *this;
 	}
 
 	Iterator  operator++(int) {
-		List<value_t>::Iterator temp(*this);
+		Iterator temp(*this);
 		++(*this);
 		return temp;
 	}
 
 	Iterator& operator--() {
-		if (it->prev == 0) { // если it указывает на первый элемент
-			throw (std::logic_error("list iterator out of range"));
+		if (it->prev == 0) { // if it is fictitious element
+			throw (std::out_of_range("list out of range"));
 		}
 		it = it->prev;
 		return *this;
 	}
 
 	Iterator  operator--(int) {
-		List<value_t>::Iterator temp(*this);
+		Iterator temp(*this);
 		--(*this);
 		return temp;
 	}
 
 	Iterator  operator+(size_t count) {
-		List<value_t>::Iterator temp = *this;
-		for (int i = 0; i < count; ++i)
-			++temp;
+		Iterator temp = *this;
+		for (int i = 0; i < count; ++i) ++temp;
 		return temp;
 	}
 
 	Iterator  operator-(size_t count) {
-		List<value_t>::Iterator temp = *this;
-		for (int i = 0; i < count; ++i)
-			--temp;
+		Iterator temp = *this;
+		for (int i = 0; i < count; ++i) --temp;
 		return temp;
 	}
 
 	Iterator& operator+=(size_t count) { *this = *this + count; return *this; }
 	Iterator& operator-=(size_t count) { *this = *this - count; return *this; }
 	value_t& operator*() { return it->value; }
-
-	bool operator!=(const List<value_t>::Iterator& right) const {
-		if (it == 0 || right.it == 0)
-			return true;
-		return it != right.it;
-	}
+	bool operator!=(const Iterator& right) const { return it != right.it; }
 
 private:
 	Iterator(Node* node) { it = node; }
 	Node* it;
+
 };

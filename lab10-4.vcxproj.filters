@@ -24,9 +24,4 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="List.inl">
-      <Filter>Исходные файлы</Filter>
-    </None>
-  </ItemGroup>
 </Project>
