@@ -22,11 +22,9 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="List-Iterator.h" />
     <ClInclude Include="List.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="List-Iterator.inl" />
     <None Include="List.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
