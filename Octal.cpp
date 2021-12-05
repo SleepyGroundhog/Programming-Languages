@@ -43,6 +43,45 @@ int Octal::compare(const Octal& left, const Octal& right) {
 	return 0;
 }
 
+std::istream& operator>> (std::istream& input, Octal& octal) {
+
+	while (Octal::isInAlpha(Octal::sep, input.peek())) input.get(); // очистка потока от символов разделителей
+	octal.list.clear();
+
+	char buf;
+	while (buf = input.get())
+	{
+		if (Octal::isInAlpha(Octal::alpha, buf))
+			octal.list.push_back(buf - '0');
+
+		else if (Octal::isInAlpha(Octal::sep, buf))
+			break;
+
+		else {
+			octal.list.clear();
+			octal.list.push_back(0);
+			while (input.peek() != '\n') input.get();
+			throw std::invalid_argument("symbol \"" + std::string(1, buf) + "\" is not octal digit");
+		}
+	}
+	octal.remove_leading_zeros();
+	return input;
+}
+
+std::ostream& operator<< (std::ostream& output, const Octal& octal) {
+	octal.list.print(std::cout, "", "");
+	return output;
+}
+
+Octal operator+(Octal left, Octal right) {
+	Octal::align(left, right, 1);
+	Iterator L = left.list.end() - 1, R = right.list.end() - 1;
+	while (L != left.list.begin())
+		*L += *R, * (L - 1) += *L / Octal::base, * L %= Octal::base, --L, --R;
+	left.remove_leading_zeros();
+	return left;
+}
+
 Octal operator-(Octal left, Octal right) {
 	if (Octal::compare(left, right) == -1) throw (Octal::negative_result());
 	Octal::align(left, right, 1);
@@ -63,11 +102,14 @@ Octal operator*(Octal left, int right) {
 	while (res.list.size() < left.list.size()) res.list.push_back(0);
 	Iterator L = left.list.end() - 1;
 	Iterator I = res.list.end() - 1;
+
 	for (; L != left.list.begin(); --L, --I) {
 		*I += Octal::mul(*L, right) % 10;
 		*(I - 1) += Octal::mul(*L, right) / 10;
 	}
+
 	res.remove_leading_zeros();
+	std::cout << "\t\t\t\t res-1 = " << res << "\n";
 	return res;
 }
 
@@ -109,5 +151,8 @@ Octal operator*(Octal left, Octal right) {
 
 Octal operator%(Octal left, Octal right) {
 	Octal div = left / right;
-	return left - div * right;
+	std::cout << div << "\n";
+	std::cout << div * right << "\n There no exception\n";
+	//return left - div * right;
+	return Octal();
 }
