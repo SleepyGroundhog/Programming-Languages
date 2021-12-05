@@ -42,7 +42,7 @@ public:
 		return *this;
 	}
 
-	bool isEmpty() { return count == 0; }
+	bool isEmpty() const { return count == 0; }
 	
 	size_t size() const { return count; }
 
@@ -72,12 +72,22 @@ public:
 		--count;
 	}
 
-	void print(bool newline = true) {
-		if ( isEmpty() ) std::cout << "list is empty";
+	value_t& back() {
+		if ( isEmpty() ) throw (std::out_of_range("list is empty"));
+		return tail->prev->value;
+	}
+
+	value_t& front() {
+		if ( isEmpty() ) throw (std::out_of_range("list is empty"));
+		return head->next->value;
+	}
+
+	void print(std::ostream& output = std::cout, std::string separator = " ", std::string endline = "") const {
+		if ( isEmpty() ) output << "";
 		for (auto& element : *this) {
-			std::cout << element << " ";
+			output << element << separator;
 		}
-		if (newline) std::cout << "\n";
+		output << endline;
 	}
 
 	Iterator begin() const { return Iterator(head->next); }
