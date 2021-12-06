@@ -17,9 +17,9 @@ public:
 		catch    (Octal::zero_division   error) { cout << "Error: " << error.what() << "!\n"; }
 		
 		switch   (Octal::compare(octal1, octal2)) {
-		case -1: cout << octal1 << " <  " << octal2 << "\n"; break;
-		case  0: cout << octal1 << " == " << octal2 << "\n"; break;
-		case  1: cout << octal1 << " >  " << octal2 << "\n"; break;
+		case -1: cout << octal1 << " < " << octal2 << "\n"; break;
+		case  0: cout << octal1 << " = " << octal2 << "\n"; break;
+		case  1: cout << octal1 << " > " << octal2 << "\n"; break;
 		}
 	}
 
@@ -31,7 +31,7 @@ public:
 				std::cin >> octal;
 				reading = false;
 			} catch (std::invalid_argument error) {
-				std::cout << "Error: " << error.what() << "!";
+				std::cout << "Error: " << error.what() << "! ";
 				std::cout << "Please, input number again.\n";
 			}
 		}

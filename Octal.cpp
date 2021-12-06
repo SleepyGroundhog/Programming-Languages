@@ -102,14 +102,11 @@ Octal operator*(Octal left, int right) {
 	while (res.list.size() < left.list.size()) res.list.push_back(0);
 	Iterator L = left.list.end() - 1;
 	Iterator I = res.list.end() - 1;
-
 	for (; L != left.list.begin(); --L, --I) {
 		*I += Octal::mul(*L, right) % 10;
 		*(I - 1) += Octal::mul(*L, right) / 10;
 	}
-
 	res.remove_leading_zeros();
-	std::cout << "\t\t\t\t res-1 = " << res << "\n";
 	return res;
 }
 
@@ -140,19 +137,17 @@ Octal operator*(Octal left, Octal right) {
 	Octal res;
 	if (Octal::compare(left, right) == -1) std::swap(left, right);
 	right.list.push_front(0);
-	Iterator R = right.list.end() - 1;
-	while (R != right.list.begin()) {
+	Iterator R = right.list.begin();
+	while (R != right.list.end()) {
 		res.list.push_back(0);
 		res = res + (left * *R);
-		--R;
+		++R;
 	}
 	return res;
 }
 
 Octal operator%(Octal left, Octal right) {
 	Octal div = left / right;
-	std::cout << div << "\n";
-	std::cout << div * right << "\n There no exception\n";
-	//return left - div * right;
-	return Octal();
+	return left - div * right;
+
 }
