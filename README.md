@@ -20,9 +20,14 @@
  - var 4 - Two container classes Array and List, Iterator class for List and functions for modificate containers
 
 # Programming-Languages---lab-9
-
+ - var 4 - Array class (listing 5.1) with Rand class
 
 # Programming-Languages---lab-10
-
+ - var 5 - List class (listing 5.4) with Octal long arithmetic
 
 # Programming-Languages---lab-11
+
+# Programmming-Languages---Сoursework
+
+# Note
+   Format of branch names: <laboratory work number>-<variant number>-<branch name>
