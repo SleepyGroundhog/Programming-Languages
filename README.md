@@ -29,5 +29,5 @@
 
 # Programmming-Languages---Сoursework
 
-# Note
-   Format of branch names: <laboratory work number>-<variant number>-<branch name>
+# Notes
+ - Format of branch names: <laboratory work number>-<variant number>-<branch name>;
