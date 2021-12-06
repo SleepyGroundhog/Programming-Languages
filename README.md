@@ -30,4 +30,4 @@
 # Programmming-Languages---Сoursework
 
 # Notes
- - Format of branch names: <laboratory work number>-<variant number>-<branch name>;
+ - Format of branch names: \<laboratory work number\>-\<variant number\>-\<branch name\>;
