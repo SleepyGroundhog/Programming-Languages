@@ -142,12 +142,10 @@
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitString.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Money.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
     <ClInclude Include="BitString.h" />
-    <ClInclude Include="Money.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

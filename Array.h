@@ -22,13 +22,13 @@ public:
 	static bool range(int value, int begin, int end);
 
 	friend std::istream& operator>>(std::istream& in, const Array& right);
-	char& operator[](int idx) const;
+	int& operator[](int idx) const;
 	
 	virtual Array operator+(const Array& right) const;
 
 protected:
 	int m_size;
-	char* m_data;
+	int* m_data;
 	const static int MAX_SIZE = 50;
 	void init();
 

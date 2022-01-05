@@ -7,6 +7,7 @@ BitString::BitString(const BitString& bstr) : Array() { *this = bstr; }
 BitString::~BitString() {}
 
 void BitString::fromString(string str) {
+	str.erase(remove(str.begin(), str.end(), ' '), str.end());
 	for (int i = 0; i < (int)str.size(); ++i) {
 		m_data[i] = str[i] - '0';
 	}

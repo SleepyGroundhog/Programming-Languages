@@ -20,14 +20,14 @@ bool Array::range(int value, int begin, int end) {
 
 Array::Array(int size) : m_size(size), m_data(nullptr) {
 	if (m_data == nullptr) {
-		m_data = new char[MAX_SIZE + 1];
+		m_data = new int[MAX_SIZE + 1];
 	}
 	init();
 }
 
 Array::Array(const Array& a) : m_size(0), m_data(nullptr) {
 	if (m_data == nullptr) {
-		m_data = new char[MAX_SIZE + 1];
+		m_data = new int[MAX_SIZE + 1];
 	}
 	init();
 	*this = a;
@@ -58,7 +58,7 @@ Array& Array::operator=(const Array& a) {
 	return *this;
 }
 
-char& Array::operator[](int idx) const {
+int& Array::operator[](int idx) const {
 	error(!range(idx, 0, size()), 3, "out of range");
 	return m_data[idx];
 }
@@ -74,7 +74,7 @@ string Array::toString() const{
 istream& operator>>(istream& in, const Array& right) {
 	for (int i = 0; i < right.m_size; ++i) {
 		in >> right[i];
-		right[i] -= '0';
+		//right[i] -= '0';
 	}
 	return in;
 }
