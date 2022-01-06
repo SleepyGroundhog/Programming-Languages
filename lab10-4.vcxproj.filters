@@ -18,7 +18,7 @@
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Octal.cpp">
+    <ClCompile Include="Decimal.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +26,7 @@
     <ClInclude Include="List.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Octal.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Ui.h">
+    <ClInclude Include="Decimal.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
